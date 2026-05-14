@@ -1,0 +1,88 @@
+/**
+ * 真实新闻数据
+ * 来源：【MSL】深至网站新闻稿更新内容归总梳理_0410.xlsx
+ * 新闻动态（31条）+ 社会责任（31条）
+ */
+
+export type NewsItem = {
+  title: string;
+  date: string;
+  link: string;
+  /** 推文/外链封面图 URL；若填写则优先用于列表与首页预览 */
+  cover?: string;
+};
+
+function fmt(raw: string): string {
+  if (raw.length === 8) return `${raw.slice(0, 4)} · ${raw.slice(4, 6)}`;
+  return raw;
+}
+
+/* ─── 新闻动态 ─── */
+export const NEWS_ITEMS: NewsItem[] = [
+  { title: "深至科技入选\"2025中国生物医药领跑者100\"榜单", date: fmt("20251119"), link: "https://mp.weixin.qq.com/s/r_TjErhtZFvUYi22UJZDFQ" },
+  { title: "深至健康\"世界脑卒中日\"基层超声筛查活动走进湖南", date: fmt("20251029"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497286&idx=1&sn=711c66666a67a971bdc622d80c36739e&chksm=fa11414ecd66c858de15b6dc4268737af04b0ca63f0435fcdc6c4b6f170f8dbc91a48e49e1c4#rd" },
+  { title: "深至科技与浙江大学联合团队提出面向 MRI 的多维度感知质量评估模型", date: fmt("20251019"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497279&idx=1&sn=c871d676fbfdb66445d6d07b74012232&chksm=fa114137cd66c8215a6ea5e8f8a8c5a10184d9c45f6a72ed359f6e76bc2a5a9e5e67d3c995a1#rd" },
+  { title: "深至科技积极响应医疗卫生\"强基工程\"，以创新科技助力基层医疗能力提升", date: fmt("20250923"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497252&idx=1&sn=17f2c14270fac033fe8f1fa55612b73b&chksm=fa11412ccd66c83af1f0b2ace43de85f41c96e5c661d6c3b5bb0de513a787af89984ff4c1d7c#rd" },
+  { title: "对话深至科技MRI研发负责人：如何实现中国首台\"无屏蔽、可移动\"磁共振？", date: fmt("20250911"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497247&idx=2&sn=e179bd4c5a6856393e50b23caeb9caf9&chksm=fa114117cd66c8010a30755f23fdd137bd4d28e52b3af82936868819db085cdebb6694ab6aa9#rd" },
+  { title: "突破之路，媒体聚焦 | 深至科技斩获国内首张无屏蔽、移动式MRI \"双证\"引广泛关注！", date: fmt("20250911"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497247&idx=1&sn=ef3887aa50261d77e23917401c5425c3&chksm=fa114117cd66c801d5ac31a8d366c14e2e5a82f63fcc1e5d72f15dfbc3e114cbc450a5f4449d#rd" },
+  { title: "深至科技斩获国内首张无屏蔽、移动式MRI \"双证\"，破解基层医疗影像难题", date: fmt("20250904"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497164&idx=1&sn=81915adee4df050f7d91cacc6fd8e574&chksm=fa1142c4cd66cbd27790a48ce895b1b402f8cb5209dd9be115a80c6ac628dfad90d1f1427bab#rd" },
+  { title: "深至科技与华院计算达成战略合作，携手推动AI+医学影像算法升级迭代", date: fmt("20250825"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497158&idx=1&sn=82befc35838b52e4cd9af64ed4966340&chksm=fa1142cecd66cbd880dd10a3809f2658878792142d32e29f6a85114610eab0b0c2f7cbca1319#rd" },
+  { title: "深至科技亮相AUCA招聘会，与全球顶尖学子共探AI医学影像未来！", date: fmt("20250815"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497153&idx=1&sn=79023ec7863b21f38a2f2bfccb11034a&chksm=fa1142c9cd66cbdf079673e942be659d29a5b8fbfdd616ae1fdf7056d1a0c3130312fe8b9fdf#rd" },
+  { title: "深至科技荣膺动脉网\"2025未来医疗100强\"中国创新器械与智能制造榜TOP100", date: fmt("20250516"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247497017&idx=1&sn=d6c62cb752780f3f6d1b94605ca0d6d3&chksm=fa114231cd66cb27600d536a943282454dbb8034c3b7cfab78d253b763f7bc0cd40e061dca33#rd" },
+  { title: "喜讯｜【深至科技】荣膺TOP10——2024年度医疗器械行业创新生态洞察评估", date: fmt("20241220"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247496677&idx=1&sn=bcfeeff9cd48e083c4517ac4554adacc&chksm=fa1144edcd66cdfbb26e44316aef90ff19c33fa20bbd0f404a19ff4db30db7b38d2c4db7deeb#rd" },
+  { title: "喜讯｜深至科技荣膺国家级专精特新\"小巨人\"企业荣誉称号！", date: fmt("20240906"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247496583&idx=1&sn=4a8172e8372ffed56127eaf84c88e485&chksm=fa11448fcd66cd99ef536919920f8ebd690c17f8e8f2ccd0884e478e43654eac51cf7e9864c2#rd" },
+  { title: "深至科技获批建立上海市院士（专家）工作站", date: fmt("20240705"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247496365&idx=1&sn=0fa1842664d140f0257e89e6965221df&chksm=fa1145a5cd66ccb3850aae20c4dfbc900a296e65c8fc507867b35cd6a0bb61bb50ee05821d2f#rd" },
+  { title: "深至科技荣膺动脉网\"2024未来医疗100强\"中国创新器械与智能制造榜TOP100", date: fmt("20240510"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247496150&idx=2&sn=58628558c6712e66f5fe94d9dad88b7e&chksm=fa1146decd66cfc8911693c8b4424ba1f3a819ef487ae7b937f810f44615ca555f93e3871f03#rd" },
+  { title: "2023年回顾｜与时代同荣，继续载誉前行！", date: fmt("20240209"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495362&idx=1&sn=9358f91898ea44c5f8b379eec529a286&chksm=fa1159cacd66d0dc996f0737c4973e74ec900846cc05ad05cd35880aa9d25e06b53a14b0d9c9#rd" },
+  { title: "喜报！深至科技荣登《2023医疗人工智能报告》", date: fmt("20231229"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495224&idx=1&sn=0bdae2f5366b746557ddfc6a6c1b0146&chksm=fa115930cd66d026fe10cfe3724b45188cb1cd523a75627fc81ace754749ac8bbc696e153504#rd" },
+  { title: "深至科技荣登CHS2023中国AI医疗企业Top20", date: fmt("20231208"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495177&idx=2&sn=c1c08b5d261fce7f7b0f27f16a566c9d&chksm=fa115901cd66d017660e9021d5c6aace92da836667119821a8c0bb5cef407e63593541921ee3#rd" },
+  { title: "黑科技竞技场！深至科技强势亮相第88届CMEF", date: fmt("20231103"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495097&idx=2&sn=49b11be3293d4c9b5b7b88d3562ff077&chksm=fa115ab1cd66d3a73072b8882080086aff6825475435a301569383a30434cafd89e64b3ba622#rd" },
+  { title: "前线速递｜深至科技荣获中国AI+创业大赛总决赛三等奖！", date: fmt("20230922"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494951&idx=1&sn=cd1ca22f225eb4e4a31aeef5f82d6521&chksm=fa115a2fcd66d339764b274004e5e81aa8db71c114612fee0d3931aa71b6e24014e3569e9538#rd" },
+  { title: "前线速递｜深至科技荣登2023年上海市专精特新中小企业名单", date: fmt("20230908"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494924&idx=1&sn=5bd3b09c26110366d2224d112330619b&chksm=fa115a04cd66d312f1752af14aee854461902962433957738e393feaf9c916337b393ab77a45#rd" },
+  { title: "圆满签约｜携手建设互联网医联体，共绘未来医疗蓝图", date: fmt("20230622"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494654&idx=1&sn=0fc1a553f41aae18476bfc4bd5a604d6&chksm=fa115cf6cd66d5e05753607007dac59b6bea39a9e63615a26fa1fa150b14953b93d85c25d55e#rd" },
+  { title: "深至科技携手GE爱迪生平台，共同完善超声领域应用生态建设", date: fmt("20230622"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494654&idx=2&sn=81c7f7699b8304864668296fc0b2fbe3&chksm=fa115cf6cd66d5e048b3439e9aedaaad36dd4bec5f65d6616a120e8781fd8ad027206d82c0d0#rd" },
+  { title: "成功入选《健康医疗大数据应用服务能力可信选型评估方法》！深至科技携手各界，共筑数字健康新基建", date: fmt("20230602"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494602&idx=1&sn=0e75e4e51e9a9751411c2fba40f06667&chksm=fa115cc2cd66d5d44d529be0820157b6a15ad50de2ea08372ce737a9311ed7e36dd71c4b0eac#rd" },
+  { title: "引进未来医疗！深至科技受邀出席上海CMEF第七届国际超声医学高峰论坛", date: fmt("20230519"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494448&idx=2&sn=fc94b6cf5cfa433258cf0bc4cdf3120a&chksm=fa115c38cd66d52ece68d0e3c75abb6ef5af6cf2c88e104208b855e3df572eeb0169dd98efad#rd" },
+  { title: "深至科技荣膺动脉网\"2023未来医疗100强\"主榜·中国创新医疗器械Top100", date: fmt("20230512"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494393&idx=2&sn=eb8e0c1095fdd59e75b32f3aad16004c&chksm=fa115df1cd66d4e7de7a29bc5b36c6ca8d0f9df7ee73f7f24a2643cc183f39a86c498486cc92#rd" },
+  { title: "齐心共筑！深至科技专家委员会常务委员专家受聘仪式圆满举行", date: fmt("20230407"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494088&idx=1&sn=09077c275b6600175fd0d64d79c0e52f&chksm=fa115ec0cd66d7d67d646575eec5b4dd66f98d1d8e983c730030003b5286020fb7a37f4091a1#rd" },
+  { title: "深至科技携手前沿科研者，共绘未来医疗蓝图", date: fmt("20230303"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493773&idx=1&sn=06838d08757bbdf152888f0547eb8ef6&chksm=fa115f85cd66d69386051f9d943aa5a4e99bd831ce455499c9a5c72ca52c517c3d3e518ad7d0#rd" },
+  { title: "破解医疗AI盈利密码｜专访冯晓源教授", date: fmt("20230224"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493671&idx=2&sn=864607c73a76ab321ab014007a48d0da&chksm=fa115f2fcd66d6391dad6adb83766b47ef430fcc3c15836c2bb970a6a710e9cb75c405ade3ec#rd" },
+  { title: "前线速递｜2023未来健康论坛，深至科技与您共同深入探讨未来医疗健康产业", date: fmt("20230217"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493636&idx=1&sn=2fd672834124e131c7d457136c0a03c0&chksm=fa115f0ccd66d61acfe121d1cb48f07d70259936249d7e642063913765663f66f9ed548b91e2#rd" },
+  { title: "数字医疗：从万亿赛道到未来日常｜深至科技共同邀您来2023未来健康论坛，一键直达2050", date: fmt("20230203"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493322&idx=3&sn=32955f7d32605534567e076129cf02ca&chksm=fa1151c2cd66d8d4260f2d82f0a876559a6201b5a60a999a531ecbfe615acffe85c8e10e7a01#rd" },
+  { title: "小型化超声助力基层分级诊疗，智慧医疗为健康生活「加码」", date: fmt("20230127"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493254&idx=1&sn=b74d7deb738e5c157bcbf64c2306e0c0&chksm=fa11518ecd66d898f4c922e9175e3413c64ee4f415ade022dca44f843ce752313cb8b1e5826b#rd" },
+];
+
+/* ─── 社会责任 ─── */
+export const CSR_ITEMS: NewsItem[] = [
+  { title: "母亲节｜感怀母恩，为爱前行！以科学力量守护女性健康", date: fmt("20240510"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247496150&idx=1&sn=782906a9f456ba0fe65d6a60a83905d9&chksm=fa1146decd66cfc8df42e455c6e5e827f93d432af7ac57cbc9e457dd017564f545c711c04bc7#rd" },
+  { title: "青年节｜早筛防中风，跟\"脆皮\"say no！", date: fmt("20240503"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247496070&idx=1&sn=e519f1b4a6a8d2182588239f07c1bf0c&chksm=fa11468ecd66cf98a40d5acce90a50e3787d50c245ce6422a423d45f4fd3cfa4f75dddafb04c#rd" },
+  { title: "世界睡眠日｜睡不好，是否为中风另一元凶？", date: fmt("20240322"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495745&idx=1&sn=ff9a41947b8c44a45e788b6144e86e7d&chksm=fa114749cd66ce5ff2173e0041896d2b923ccae1e67754a3d5e9394fc42f74397be8b77434df#rd" },
+  { title: "世界癌症日｜传递\"三早\"理念，捍卫国民健康", date: fmt("20240202"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495338&idx=1&sn=43bda43017abd4f08f3dc80fa6b1bed6&chksm=fa1159a2cd66d0b48a1e81d1cb328104d1f0c4349ee1e31d219f3f749b3fc13d821e276f7aa4#rd" },
+  { title: "化繁为简！AI赋能影像科，让基层有「医」靠", date: fmt("20231222"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495209&idx=1&sn=17a80965f29d8aa81c9b30cc1bb11249&chksm=fa115921cd66d037ff27ac9cf2db4f9a6c2392e5c4810457a189fb22d957080bda93238204ab#rd" },
+  { title: "世界强化免疫日｜增强免疫，防「风」未然！", date: fmt("20231215"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495191&idx=1&sn=b7b8336ae7a07c5eb62aa5f122cc8dea&chksm=fa11591fcd66d0094a918bea2eea1fef7817adadacce33a60a5267cc4e477bc7620bdf84a761#rd" },
+  { title: "响应中央！深至科技走进武汉江腾社区，振兴基层医疗", date: fmt("20231117"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495130&idx=1&sn=d5db41c490d80a356636324db4a846cf&chksm=fa115ad2cd66d3c4f27159a50e2ed6340eb5f2ecd1ed1abf85a55bde1c8d0ccc60ba4cb4bb7d#rd" },
+  { title: "世界防治糖尿病日｜脑卒中防治\"新侦探\"，助力国民大健康", date: fmt("20231110"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495117&idx=1&sn=38e759e8918287917ff7317eb14194ea&chksm=fa115ac5cd66d3d3d14b763fd6333d204942ab609c707fc3359978c49882a4902cf82920035e#rd" },
+  { title: "世界卒中日｜远离头号杀手，早识别是关键！", date: fmt("20231027"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247495079&idx=1&sn=ec93c28655d15d287abd68e448d5c5a5&chksm=fa115aafcd66d3b93a4a6cc55ee52337e62347f99880a53de4338cdb2bd39fd91a98b2901e71#rd" },
+  { title: "基层故事｜守护健康零距离，超声也能「强基层」！", date: fmt("20230714"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494745&idx=1&sn=6199b1044e7d10a9d3b9173af74d2361&chksm=fa115b51cd66d247a074aa26bee198d98611315974a3a67674abd4096c14ed4de66615accb2d#rd" },
+  { title: "情暖母亲节｜以创新之力，守护女性健康", date: fmt("20230512"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494393&idx=1&sn=ea697b4b09f5f75cb8f05181bbb9467d&chksm=fa115df1cd66d4e75a096c8c051e7f0857be4e7caf3cdcb970ecbb1797d5e578a8aae5309bbe#rd" },
+  { title: "基层故事｜优质医疗基层行，助推落地「健康中国2030」", date: fmt("20230414"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247494136&idx=1&sn=9213e70d073b88660a0fea42d43f1d78&chksm=fa115ef0cd66d7e6ee81197c556d4a676d13198216a4b4ca83920ec0db9979e5184787cd0512#rd" },
+  { title: "「女神节」话超声｜深至科技以医疗力量，筑女性健康", date: fmt("20230309"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493814&idx=1&sn=121cb25bad38a8c65e944d1b9fbf6bda&chksm=fa115fbecd66d6a8349bacbd86af24ef0fe066665866d29b0ee84e3c6ec7a4642d26cfa83b3d#rd" },
+  { title: "基层故事｜义诊早筛解民忧，预防卒中护健康", date: fmt("20230224"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247493671&idx=1&sn=475c4f648f40c717cccee9b56ab17792&chksm=fa115f2fcd66d63965bda51670bd4580909e505cb55fabbb55f6bb7e9f928fc0c295f44f216e#rd" },
+  { title: "智慧医疗赋能基层健康，\"家门口\"也能获得及时救助", date: fmt("20221118"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492796&idx=1&sn=47b9b5c0a89c66d4187e96fdb9b950d5&chksm=fa1153b4cd66daa25ef58e8e266ac74d8d63ee5099c82841fb3c401e4afe40c660b92f5923ab#rd" },
+  { title: "\"粉红丝带月\"关爱乳腺，浅谈乳腺筛查", date: fmt("20221014"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492672&idx=1&sn=2162ca0bc5f938f55380e5a63c37cfb0&chksm=fa115348cd66da5efdb0248b11d8ee5502de30dd2ed49b3557f60d69b1aaef224e7cfd0e2b4f#rd" },
+  { title: "科普 | 防治乳腺癌 我们在行动", date: fmt("20221014"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492672&idx=2&sn=0d9c24e771b3b3b852c25fbcc24653ef&chksm=fa115348cd66da5e275ab47ccbb2f77a83e42f3a5d62772e549b2b1295941e2c7c223d63b8ad#rd" },
+  { title: "2022年中国医师节：\"医\"心向党，踔厉奋进", date: fmt("20220819"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492564&idx=2&sn=de5642870f450eb4a78b4461e67020d4&chksm=fa1154dccd66ddca88a6a2e90998e74ceaffb0ba23b40413a93e0548c983d0e9f54ea84d09eb#rd" },
+  { title: "世界环境日｜只有一个地球", date: fmt("20220603"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492345&idx=3&sn=75c86c5f6b76eef2c32ee76b03d2101f&chksm=fa1155f1cd66dce724e0859f0715f9d5bc8a3d4bdadbaac0a8844b572f8c6c45a84a2bd39ef4#rd" },
+  { title: "致敬科技工作者｜星星之火 点燃科技之光", date: fmt("20220527"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492322&idx=1&sn=247766e84d8e3664c8cc561d370435e3&chksm=fa1155eacd66dcfc9bdfc042d6fdbf468a986856a8cd41c850fd8b4cd29e243d97568bd7e83d#rd" },
+  { title: "最美国际护士节｜她的故事你知道吗？", date: fmt("20220506"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492244&idx=2&sn=c96c9a6d91af1ad7f27224ed6ecf970b&chksm=fa11559ccd66dc8af26005f552f1d7420c4081404e3d921f54419a43e42958dcf38d4bcb7d47#rd" },
+  { title: "知识产权宣传周｜尊重知识产权，我们势在必行！", date: fmt("20220429"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492197&idx=1&sn=66b0d45c0d8f22aa038fccc7aa6c2baa&chksm=fa11556dcd66dc7b337fd41c77074f4b8244887bd0b29777fb5db683bea4e7c896df68abf4ff#rd" },
+  { title: "防治乳腺癌 我们在行动", date: fmt("20220421"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492158&idx=2&sn=f37b47118ec954317a3c31eb3a002cb3&chksm=fa115536cd66dc2039bcc034e95d56d95469f471a68c70b93bce35b75e974b993d0882f132dd#rd" },
+  { title: "全国肿瘤防治周 | \"科技防癌\"早筛的重要性", date: fmt("20220421"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247492158&idx=1&sn=9c1aac7c11eb87a618633a40e5af368a&chksm=fa115536cd66dc2095b0d436036c726042665c997ac296adbb2334e14b2eba7b7e1a18ecddd0#rd" },
+  { title: "致敬 | 细数中国女医生的\"第一\"", date: fmt("20220308"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247491954&idx=3&sn=9e7a7a40a4e1a49a99b705734b1cdd30&chksm=fa11567acd66df6c6af048cef80d2091bd4812d707605a5cd64e28c132fdbd828b38413f361e#rd" },
+  { title: "HerPower | 聚焦新时代女医师", date: fmt("20220308"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247491954&idx=2&sn=b55eaef9ecacc75c3140673232ea2d15&chksm=fa11567acd66df6cdb4093de7668b21529303452036363e9b62cf87c315ec90150aab639ac14#rd" },
+  { title: "深至和你一起，致了不起的她们", date: fmt("20220308"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247491954&idx=1&sn=99be12b74a054de910391816a923d445&chksm=fa11567acd66df6cdf846045ae457b860bb1706279ede00f1c9b93654b9302c503540810df16#rd" },
+  { title: "肩负亿万村民健康，他们的故事有待发声", date: fmt("20220225"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247491729&idx=2&sn=044a66a6140f0567cc2577a8882436b7&chksm=fa115799cd66de8fece4b328fc8b59ea0cd67244ec4370ebcf58b0965555236a2c03ac5c9200#rd" },
+  { title: "基层故事 | 九旬老人在公益筛查中发生的\"小事\"不小", date: fmt("20220128"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247489281&idx=2&sn=3ca46932d5bba55043dda8f869cc9786&chksm=fa12a009cd65291fd19bc6ef888e26cc84df0b2cf78869c6254e396e9952a2a67d304d3064be#rd" },
+  { title: "基层故事 | 深至科技小型化超声如何赋能乡县助力分级诊疗建设", date: fmt("20220121"), link: "http://mp.weixin.qq.com/s?__biz=MzUyNjA5OTA0Nw==&mid=2247489067&idx=2&sn=aab894b66a3f0060b35fe18859f61a16&chksm=fa12a123cd6528353c5fecf0721d3d96534d4b462db6198890b30132d414d0252a28042ebe70#rd" },
+  { title: "贵州六枝特区健康惠民行动——掌上超声脑卒中智能筛查走进乡村", date: fmt("20210902"), link: "https://mp.weixin.qq.com/+K6:K36s/Kf5kY-7DUe2DsJIA96f66A" },
+];

@@ -1,0 +1,237 @@
+/**
+ * 新闻中心
+ *  · 深至故事 / 社会责任
+ */
+import { useMemo } from "react";
+import { motion } from "framer-motion";
+import { Calendar, ArrowUpRight } from "lucide-react";
+import PageShell from "@/components/layout/PageShell";
+import PageHero from "@/components/layout/PageHero";
+import SectionHeader from "@/components/layout/SectionHeader";
+import { PreviewStoryMedia } from "@/components/site/PreviewStoryMedia";
+import { NEWS_SECTIONS } from "@/lib/copy";
+import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
+import { NEWS_ITEMS, CSR_ITEMS } from "@/lib/news-data";
+import { trpc } from "@/lib/trpc";
+
+const STORIES = NEWS_ITEMS.map((n) => ({
+  title: n.title,
+  date: n.date,
+  link: n.link,
+  cover: n.cover,
+}));
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 22 },
+  show: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay: i * 0.07, ease: "easeOut" as const },
+  }),
+};
+
+export default function NewsPage() {
+  const storyUrls = useMemo(() => NEWS_ITEMS.map((n) => n.link), []);
+  const previewQuery = trpc.linkPreview.batch.useQuery(
+    { urls: storyUrls },
+    {
+      staleTime: 60 * 60 * 1000,
+      gcTime: 2 * 60 * 60 * 1000,
+      retry: 1,
+    }
+  );
+
+  const ogByUrl = useMemo(() => {
+    const rows = previewQuery.data;
+    if (!rows) return new Map<string, string | null>();
+    const m = new Map<string, string | null>();
+    rows.forEach((row, i) => {
+      const u = storyUrls[i];
+      if (!u) return;
+      if (row.ok && row.image) m.set(u, row.image);
+      else m.set(u, null);
+    });
+    return m;
+  }, [previewQuery.data, storyUrls]);
+
+  const csrUrls = useMemo(() => CSR_ITEMS.map((n) => n.link), []);
+  const csrPreviewQuery = trpc.linkPreview.batch.useQuery(
+    { urls: csrUrls },
+    {
+      staleTime: 60 * 60 * 1000,
+      gcTime: 2 * 60 * 60 * 1000,
+      retry: 1,
+    }
+  );
+
+  const csrOgByUrl = useMemo(() => {
+    const rows = csrPreviewQuery.data;
+    if (!rows) return new Map<string, string | null>();
+    const m = new Map<string, string | null>();
+    rows.forEach((row, i) => {
+      const u = csrUrls[i];
+      if (!u) return;
+      if (row.ok && row.image) m.set(u, row.image);
+      else m.set(u, null);
+    });
+    return m;
+  }, [csrPreviewQuery.data, csrUrls]);
+
+  return (
+    <PageShell>
+      <PageHero
+        index="04"
+        en="Newsroom"
+        title="新闻中心"
+        desc="深至故事、社会责任 — 完整、持续、可信地呈现深至的最新进展。"
+        subs={NEWS_SECTIONS}
+        variant="pink"
+        videoSrc={HERO_VIDEOS.news}
+        posterSrc={HERO_POSTERS.news}
+        tone="dark"
+      />
+
+      {/* 1. 深至故事 */}
+      <section id="stories" className="relative scroll-mt-24 bg-white py-24 lg:py-32 overflow-hidden">
+        <div className="container">
+          <SectionHeader
+            index="04.1"
+            en="Stories"
+            title="深至故事"
+            desc="包括但不限于公司融资、业务产品发布、重大合作、资质获取等信息发布。"
+          />
+
+          {/* 置顶大图：最新一篇 */}
+          <motion.a
+            href={STORIES[0].link}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: "easeOut" as const }}
+            className="mt-12 group flex flex-col lg:flex-row gap-0 rounded-3xl overflow-hidden bg-white border border-border hover:shadow-[0_40px_80px_-40px_rgba(80,70,180,0.35)] transition-all"
+          >
+            <div className="relative lg:w-[55%] aspect-[16/9] lg:aspect-auto overflow-hidden shrink-0 bg-gradient-to-br from-[#EAE4FF] via-[#F7F3FF] to-[#FFE8F4]">
+              <PreviewStoryMedia
+                title={STORIES[0].title}
+                link={STORIES[0].link}
+                dataCover={STORIES[0].cover}
+                ogImage={ogByUrl.get(STORIES[0].link) ?? null}
+                layout="featured"
+              />
+              <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/90 backdrop-blur px-3 py-1 text-[11px] font-medium text-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#1E6BFF]" />
+                新闻动态
+              </div>
+            </div>
+            <div className="flex flex-col justify-center p-7 lg:p-10">
+              <div className="flex items-center gap-2 text-[12px] text-foreground/50">
+                <Calendar className="h-3.5 w-3.5" />
+                {STORIES[0].date}
+              </div>
+              <h3 className="mt-3 font-zh text-[20px] lg:text-[26px] font-black leading-snug text-foreground">
+                {STORIES[0].title}
+              </h3>
+              <div className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#1E6BFF] group-hover:gap-2.5 transition-all">
+                阅读原文
+                <ArrowUpRight className="h-4 w-4" />
+              </div>
+            </div>
+          </motion.a>
+
+          {/* 全部文章列表 */}
+          <ul className="mt-8 divide-y divide-border rounded-3xl border border-border bg-white overflow-hidden">
+            {STORIES.slice(1).map((n, i) => (
+              <motion.li
+                key={n.link}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
+                custom={i}
+                variants={fadeUp}
+              >
+                <a
+                  href={n.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 lg:gap-6 px-5 lg:px-8 py-4 hover:bg-[#F8F6FF] transition-colors group"
+                >
+                  <PreviewStoryMedia
+                    title={n.title}
+                    link={n.link}
+                    dataCover={n.cover}
+                    ogImage={ogByUrl.get(n.link) ?? null}
+                    layout="row"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 text-[11px] text-foreground/45">
+                      <Calendar className="h-3 w-3 shrink-0" />
+                      {n.date}
+                    </div>
+                    <div className="mt-1 font-zh text-[14.5px] lg:text-[15.5px] font-bold text-foreground leading-snug line-clamp-2">
+                      {n.title}
+                    </div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 text-foreground/30 group-hover:text-[#1E6BFF] shrink-0 transition-colors" />
+                </a>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 2. 社会责任 */}
+      <section id="csr" className="relative scroll-mt-24 bg-gradient-to-b from-[#FFF1F6] to-white py-24 lg:py-32 overflow-hidden">
+        <div className="container">
+          <SectionHeader
+            index="04.2"
+            en="Social Responsibility"
+            title="社会责任"
+            desc="深至在公益健康教育、基层医疗惠民与社区筛查等领域的持续投入。"
+          />
+
+          <ul className="mt-12 divide-y divide-border rounded-3xl border border-border bg-white overflow-hidden">
+            {CSR_ITEMS.map((n, i) => (
+              <motion.li
+                key={n.link}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
+                custom={i}
+                variants={fadeUp}
+                whileHover={{ x: 6 }}
+              >
+                <a
+                  href={n.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 lg:gap-6 px-5 lg:px-8 py-4 hover:bg-[#FFF8FB] transition-colors group"
+                >
+                  <PreviewStoryMedia
+                    title={n.title}
+                    link={n.link}
+                    dataCover={n.cover}
+                    ogImage={csrOgByUrl.get(n.link) ?? null}
+                    layout="row"
+                    tone="csr"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 text-[11px] text-foreground/45">
+                      <Calendar className="h-3 w-3 shrink-0" />
+                      {n.date}
+                    </div>
+                    <div className="mt-1 font-zh text-[14.5px] lg:text-[15.5px] font-bold text-foreground leading-snug line-clamp-2">
+                      {n.title}
+                    </div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 text-foreground/25 group-hover:text-[#FF77C3] shrink-0 transition-colors" />
+                </a>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </PageShell>
+  );
+}
