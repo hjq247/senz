@@ -57,7 +57,8 @@ export const HERO_POSTERS = {
 
 export type HeroKey = keyof typeof HERO_VIDEOS;
 
-/** 首页 Hero 主视频（首页视频4 素材 · v10）；双字段同址，保留 leftVideo 字段名兼容旧调用 */
+/** 首页 Hero 主视频（首页视频4 素材 · v10）；双字段同址，保留 leftVideo 字段名兼容旧调用
+ * 若仅更换 mp4，请从新视频截取首帧覆盖 `senz_hero_home_v10_e42264da.png`，与 `client/index.html` preload 一致。 */
 export const HERO_SPLIT = {
   leftVideo: "/manus-storage/senz_hero_home_v10_e42264da.mp4",
   leftPoster: "/manus-storage/senz_hero_home_v10_e42264da.png",

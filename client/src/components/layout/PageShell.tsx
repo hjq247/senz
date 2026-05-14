@@ -48,7 +48,8 @@ function usePreloadHero(loc: string) {
       links.push(l);
     };
 
-    mkLink("image", p, "image/webp");
+    const imageType = p.endsWith(".png") ? "image/png" : "image/webp";
+    mkLink("image", p, imageType);
     mkLink("video", v, "video/mp4");
 
     return () => {
