@@ -416,9 +416,9 @@ export const EXPERTS_NOTE =
   "深至与海内外多位临床医学、医学影像、AI 与公共卫生领域的专家保持长期合作，定期共建研究项目、临床方案与培训课程。完整名单将在官网正式上线时同步公布。";
 
 export const NEWS_SECTIONS = [
-  { id: "stories", label: "深至故事",   en: "Stories",            desc: "包括但不限于公司融资、业务产品发布、重大合作、资质获取等信息发布。" },
-  { id: "media",   label: "媒体报道",   en: "Media Coverage",     desc: "媒体对公司的报道转载。" },
-  { id: "csr",     label: "社会责任",   en: "Social Responsibility", desc: "深至在公益、基层医疗与健康教育等领域的持续投入。" },
+  { id: "stories", label: "深至故事", en: "Stories", desc: "包括但不限于公司融资、业务产品发布、重大合作、资质获取等信息发布。" },
+  { id: "csr", label: "社会责任", en: "Social Responsibility", desc: "深至在公益、基层医疗与健康教育等领域的持续投入。" },
+  { id: "media", label: "媒体报道", en: "Media Coverage", desc: "媒体对公司的报道与转载。" },
 ] as const;
 
 export const CAREERS_SECTIONS = [

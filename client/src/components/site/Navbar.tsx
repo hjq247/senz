@@ -17,8 +17,8 @@ const NAV: NavItem[] = [
     label: "平台技术",
     href: "/platform",
     sub: [
-      { label: "原生 AI 终端体系", href: "/platform#terminal", desc: "硬件 × 算法 × 模型 × 用户 四位一体" },
-      { label: "健康管理协同系统", href: "/platform#neuro", desc: "Neuro AI 大脑驱动三大智能体" },
+      { label: "原生 AI 终端体系", href: "/platform#terminal" },
+      { label: "健康管理协同系统", href: "/platform#neuro" },
     ],
   },
   {
@@ -47,8 +47,8 @@ const NAV: NavItem[] = [
     href: "/news",
     sub: [
       { label: "深至故事", href: "/news#stories" },
-      { label: "媒体报道", href: "/news#media" },
       { label: "社会责任", href: "/news#csr" },
+      { label: "媒体报道", href: "/news#media" },
     ],
   },
   {

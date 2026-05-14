@@ -4,7 +4,6 @@
  *  · 视频缺省时回落到 AuroraBackdrop（旧风格）
  *  · 同时支持 poster（同色系首帧静态图），避免弱网/未播放时黑场
  */
-import { useId } from "react";
 import { motion } from "framer-motion";
 import AuroraBackdrop from "./AuroraBackdrop";
 
@@ -22,8 +21,6 @@ export default function PageHero({
   videoSrc,
   posterSrc,
   tone = "dark",
-  /** 浅色 Hero：整屏仍为原有白色蒙版；仅在底部字幕带叠一层偏灰的柔化 */
-  subtitleShield = false,
 }: {
   index: string;
   en: string;
@@ -35,9 +32,7 @@ export default function PageHero({
   videoSrc?: string;
   posterSrc?: string;
   tone?: Tone;
-  subtitleShield?: boolean;
 }) {
-  const subtitleArcMaskId = `subtitle-arc-${useId().replace(/:/g, "")}`;
   const isVideo = !!videoSrc;
   // 全站统一明亮彩调：保留 tone 参数但内部一律按 light 渲染
   // （历史上 dark tone 会压深色，现在所有页面都使用浅亮多彩蒙层）
@@ -100,48 +95,6 @@ export default function PageHero({
                 className="absolute bottom-[10%] left-[6%] h-[420px] w-[420px] rounded-full opacity-45 blur-3xl"
                 style={{ background: "radial-gradient(closest-side, rgba(176,200,255,0.55), transparent)" }}
               />
-              {subtitleShield && (
-                <>
-                  {/*
-                    弧形蒙版（SVG mask，坐标 0~1；y 向下）：
-                    · 上边界为「一段」二次贝塞尔 Q（抛物线弧），从左缘近顶 (0, ty) 到右下 (ex, ey)，整条光滑无折角。
-                    · 左上很窄：只保留 L 0 1 → L 0 ty，ty 越小越贴顶。
-                    · 弧的弯曲：Q 控制点 (qx,qy) 固定时，可调弧起点 L 0 ty 与终点 (ex,ey)，让控制点离弦更远则弧线更明显。
-                    · 弧终点：改 (ex, ey)；整条蒙层高度见下层 div 的 h / max-h / min-h。
-                    · 颜色：下层 div 的 linear-gradient（暖白 / 浅灰 rgba）；blur 见 backdrop-blur-*。
-                  */}
-                  <svg
-                    width={0}
-                    height={0}
-                    className="absolute overflow-hidden"
-                    aria-hidden
-                  >
-                    <defs>
-                      <mask
-                        id={subtitleArcMaskId}
-                        maskUnits="objectBoundingBox"
-                        maskContentUnits="objectBoundingBox"
-                      >
-                        <path
-                          fill="white"
-                          d="M 0 1 L 0 0.006 Q 0.5 0.49 0.982 0.902 L 1 1 Z"
-                        />
-                      </mask>
-                    </defs>
-                  </svg>
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 bottom-0 h-[33%] max-h-[min(33vh,320px)] min-h-[120px] backdrop-blur-lg sm:backdrop-blur-xl"
-                    style={{
-                      /* 与整页浅色 Hero 一致：偏暖白 / 极浅灰，避免冷蓝灰 */
-                      background:
-                        "linear-gradient(165deg, rgba(255,253,250,0.38) 0%, rgba(248,247,244,0.26) 45%, rgba(255,255,255,0.10) 82%, transparent 100%)",
-                      maskImage: `url(#${subtitleArcMaskId})`,
-                      WebkitMaskImage: `url(#${subtitleArcMaskId})`,
-                    }}
-                  />
-                </>
-              )}
             </>
           )}
         </>

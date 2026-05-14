@@ -1,6 +1,9 @@
 /**
  * 服务端链接预览：抓取目标页 HTML，解析 Open Graph / Twitter Card 等 meta。
  * 用于首页新闻卡片等场景；须配合主机白名单以防 SSRF。
+ *
+ * 内存缓存（进程内）：成功结果默认保留 7 天，失败结果短缓存 10 分钟，避免每次打开页面都请求微信。
+ * 可调环境变量：LINK_PREVIEW_CACHE_TTL_MS（成功，毫秒）、LINK_PREVIEW_ERROR_CACHE_TTL_MS（失败）。
  */
 
 import net from "node:net";
@@ -109,6 +112,48 @@ export type LinkPreviewErr = { ok: false; url: string; error: string };
 
 export type LinkPreviewResult = LinkPreviewOk | LinkPreviewErr;
 
+type CachedPreview = { storedAt: number; ttlMs: number; result: LinkPreviewResult };
+
+const previewCache = new Map<string, CachedPreview>();
+
+const DEFAULT_OK_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const DEFAULT_ERR_TTL_MS = 10 * 60 * 1000;
+const MAX_CACHE_ENTRIES = 600;
+
+function cacheTtlOkMs(): number {
+  const raw = process.env.LINK_PREVIEW_CACHE_TTL_MS;
+  if (!raw?.trim()) return DEFAULT_OK_TTL_MS;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 60_000 ? n : DEFAULT_OK_TTL_MS;
+}
+
+function cacheTtlErrMs(): number {
+  const raw = process.env.LINK_PREVIEW_ERROR_CACHE_TTL_MS;
+  if (!raw?.trim()) return DEFAULT_ERR_TTL_MS;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 10_000 ? n : DEFAULT_ERR_TTL_MS;
+}
+
+function getCachedPreview(urlStr: string): LinkPreviewResult | null {
+  const row = previewCache.get(urlStr);
+  if (!row) return null;
+  if (Date.now() - row.storedAt > row.ttlMs) {
+    previewCache.delete(urlStr);
+    return null;
+  }
+  return row.result;
+}
+
+function setCachedPreview(urlStr: string, result: LinkPreviewResult): void {
+  const ttlMs = result.ok ? cacheTtlOkMs() : cacheTtlErrMs();
+  previewCache.set(urlStr, { storedAt: Date.now(), ttlMs, result });
+  while (previewCache.size > MAX_CACHE_ENTRIES) {
+    const first = previewCache.keys().next().value;
+    if (first === undefined) break;
+    previewCache.delete(first);
+  }
+}
+
 function parseHead(html: string, baseUrl: string): Omit<LinkPreviewOk, "ok" | "url"> {
   const title =
     extractMeta(html, "og:title", "property") ||
@@ -212,13 +257,20 @@ async function fetchTextFollowingRedirects(startUrl: string): Promise<{ finalUrl
 }
 
 export async function fetchLinkPreview(urlStr: string): Promise<LinkPreviewResult> {
+  const hit = getCachedPreview(urlStr);
+  if (hit) return hit;
+
   try {
     const { finalUrl, html } = await fetchTextFollowingRedirects(urlStr);
     const parsed = parseHead(html, finalUrl);
-    return { ok: true, url: urlStr, ...parsed };
+    const ok: LinkPreviewResult = { ok: true, url: urlStr, ...parsed };
+    setCachedPreview(urlStr, ok);
+    return ok;
   } catch (e) {
     const msg = e instanceof Error ? e.message : "UNKNOWN";
-    return { ok: false, url: urlStr, error: msg };
+    const err: LinkPreviewResult = { ok: false, url: urlStr, error: msg };
+    setCachedPreview(urlStr, err);
+    return err;
   }
 }
 

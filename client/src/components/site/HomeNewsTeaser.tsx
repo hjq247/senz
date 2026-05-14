@@ -1,13 +1,11 @@
 /**
  * 首页 · 最新动态（teaser）
  * 静态展示「新闻动态 + 社会责任」中日期最近的 3 条，点击卡片在新标签页打开原文链接。
- * 缩略图与新闻中心列表（PreviewStoryMedia · row）同尺寸与逻辑：og:image → cover → 图标占位。
+ * 缩略图与新闻中心列表（PreviewStoryMedia · row）同尺寸与逻辑：优先使用 news-data 内固化的 cover。
  */
-import { useMemo } from "react";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { Link } from "wouter";
 import { PreviewStoryMedia } from "@/components/site/PreviewStoryMedia";
-import { trpc } from "@/lib/trpc";
 import { NEWS_ITEMS, CSR_ITEMS } from "@/lib/news-data";
 
 type Item = {
@@ -114,29 +112,6 @@ function Card({
 }
 
 export default function HomeNewsTeaser() {
-  const urls = useMemo(() => LATEST.map((i) => i.anchor), []);
-  const previewQuery = trpc.linkPreview.batch.useQuery(
-    { urls },
-    {
-      staleTime: 60 * 60 * 1000,
-      gcTime: 2 * 60 * 60 * 1000,
-      retry: 1,
-    }
-  );
-
-  const ogByUrl = useMemo(() => {
-    const rows = previewQuery.data;
-    if (!rows) return new Map<string, string | null>();
-    const m = new Map<string, string | null>();
-    rows.forEach((row, i) => {
-      const u = urls[i];
-      if (!u) return;
-      if (row.ok && row.image) m.set(u, row.image);
-      else m.set(u, null);
-    });
-    return m;
-  }, [previewQuery.data, urls]);
-
   return (
     <section
       id="news-teaser"
@@ -168,7 +143,7 @@ export default function HomeNewsTeaser() {
             <Card
               key={`${item.kind}-${item.ord}-${item.anchor}`}
               item={item}
-              ogImage={ogByUrl.get(item.anchor) ?? null}
+              ogImage={null}
             />
           ))}
         </div>
