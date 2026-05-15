@@ -105,7 +105,7 @@ function Footer() {
   return (
     <footer className="relative mt-0 border-t border-border bg-white">
       <div className="container py-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-5 flex flex-row items-start gap-4 sm:gap-6">
+        <div className="lg:col-span-4 flex flex-row items-start gap-4 sm:gap-6">
           <img
             src="/images/wechat-official-account.png"
             alt="深至科技微信公众号"
@@ -124,7 +124,7 @@ function Footer() {
 
         <nav
           aria-label="页脚导航"
-          className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-10 sm:gap-x-8"
+          className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-8 gap-y-10 sm:gap-x-10"
         >
           {FOOTER_NAV.map((item) => (
             <FootSection key={item.href} item={item} loc={loc} />
@@ -137,7 +137,7 @@ function Footer() {
 
 function FootSection({ item, loc }: { item: NavItem; loc: string }) {
   return (
-    <div className="min-w-0">
+    <div className="min-w-0 lg:min-w-[11.5rem]">
       <Link
         href={item.href}
         className="text-[14px] font-bold font-zh text-foreground/90 hover:text-[#1E6BFF] transition-colors"
