@@ -1,8 +1,9 @@
 /**
- * Senz Aurora — News / 新闻中心（首页模块）
+ * 首页新闻模块；「查看全部动态」跳转关于页 #news。
  * 风格：大封面 featured + 右侧三篇小卡 + 底部装饰带（无占位新闻图）
  */
 import { ArrowUpRight, Calendar, Newspaper } from "lucide-react";
+import { Link } from "wouter";
 import { NEWS_ITEMS } from "@/lib/news-data";
 
 type News = { title: string; tag: string; date: string; cover?: string; link: string };
@@ -40,15 +41,13 @@ export default function NewsSection() {
               最新融资、产品发布、技术洞察与生态合作动态。让全球每一位医生都能用上医学影像。
             </p>
           </div>
-          <button
-            onClick={() => {
-              /* placeholder */
-            }}
+          <Link
+            href="/about#news"
             className="inline-flex h-11 items-center gap-2 rounded-full border border-foreground/15 px-5 text-[13px] font-medium text-foreground hover:border-foreground/40 transition-colors w-fit"
           >
-            查看全部新闻
+            查看全部动态
             <ArrowUpRight className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-6">

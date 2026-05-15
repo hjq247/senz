@@ -38,7 +38,6 @@ export const HERO_VIDEOS = {
   about: "/manus-storage/hero_about_live_106baeda.mp4",
   news: "/manus-storage/senz_hero_news_v2_69e2baa6.mp4",
   careers: "/manus-storage/hero_careers_live_e1fcceb7.mp4",
-  contact: "/manus-storage/senz_hero_contact_v2_fbe942c4.mp4",
 } as const;
 
 /** 与 HERO_VIDEOS 一一对应的同色系首帧 webp 静态图（~40-80KB） */
@@ -52,7 +51,6 @@ export const HERO_POSTERS = {
   about: "/manus-storage/hero_about_live_7751f73f.webp",
   news: "/manus-storage/senz_hero_news_v2_9d780267.webp",
   careers: "/manus-storage/hero_careers_live_3568f430.webp",
-  contact: "/manus-storage/senz_hero_contact_v2_b52ca8c3.webp",
 } as const;
 
 export type HeroKey = keyof typeof HERO_VIDEOS;

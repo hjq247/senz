@@ -10,10 +10,14 @@ import SolutionDetail from "./pages/SolutionDetail";
 import PlatformPage from "./pages/PlatformPage";
 import ProductsPage from "./pages/ProductsPage";
 import AboutPage from "./pages/AboutPage";
-import NewsPage from "./pages/NewsPage";
 import CareersPage from "./pages/CareersPage";
-import ContactPage from "./pages/ContactPage";
 import IntroSplash from "@/components/site/IntroSplash";
+
+/** 旧「新闻中心」独立页已并入关于深至，保留 /news 链接兼容 */
+function LegacyNewsRedirect() {
+  if (typeof window !== "undefined") window.location.replace("/about#news");
+  return null;
+}
 
 /** 仅处理带 #hash 的锚点滚动（无 hash 的滚顶由 PageShell / SolutionDetail 的 useLayoutEffect 负责） */
 function ScrollMaster() {
@@ -21,7 +25,8 @@ function ScrollMaster() {
   useEffect(() => {
     const hash = window.location.hash;
     if (!hash) return;
-    const id = hash.replace("#", "");
+    const raw = hash.replace("#", "");
+    const id = ["stories", "csr", "media"].includes(raw) ? "news" : raw;
     requestAnimationFrame(() => {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -38,9 +43,8 @@ function Router() {
       <Route path="/platform" component={PlatformPage} />
       <Route path="/products" component={ProductsPage} />
       <Route path="/about" component={AboutPage} />
-      <Route path="/news" component={NewsPage} />
+      <Route path="/news" component={LegacyNewsRedirect} />
       <Route path="/careers" component={CareersPage} />
-      <Route path="/contact" component={ContactPage} />
       <Route path="/solutions/patient">
         <SolutionDetail audience="patient" />
       </Route>

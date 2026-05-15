@@ -10,6 +10,7 @@ export const SITE_NAV: NavItem[] = [
     sub: [
       { label: "原生 AI 终端体系", href: "/platform#terminal" },
       { label: "健康管理协同系统", href: "/platform#neuro" },
+      { label: "知识产权", href: "/platform#ip" },
     ],
   },
   {
@@ -29,16 +30,8 @@ export const SITE_NAV: NavItem[] = [
       { label: "公司文化", href: "/about#culture" },
       { label: "发展历程", href: "/about#history" },
       { label: "资质荣誉", href: "/about#honors" },
-      { label: "知识产权", href: "/about#ip" },
-    ],
-  },
-  {
-    label: "新闻中心",
-    href: "/news",
-    sub: [
-      { label: "深至故事", href: "/news#stories" },
-      { label: "社会责任", href: "/news#csr" },
-      { label: "媒体报道", href: "/news#media" },
+      { label: "新闻中心", href: "/about#news" },
+      { label: "总部地址", href: "/about#address" },
     ],
   },
   {
@@ -49,9 +42,5 @@ export const SITE_NAV: NavItem[] = [
       { label: "员工活动", href: "/careers#life" },
       { label: "开放职位", href: "/careers#openings" },
     ],
-  },
-  {
-    label: "联系我们",
-    href: "/contact",
   },
 ];

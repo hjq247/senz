@@ -197,7 +197,7 @@ export default function PatentSwiperSection() {
       />
 
       <div className="container">
-        <SectionHeader index="03.5" en="Intellectual Property" title="知识产权" light />
+        <SectionHeader index="01.3" en="Intellectual Property" title="知识产权" light />
 
         {/* 专利总标题 */}
         <motion.div

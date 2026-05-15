@@ -7,20 +7,19 @@
  *  · 蒙层：仅在左侧 + 顶部 + 底部薄薄的白雾，不再压视频中央人物
  *  · 整页 100% 缩放下，视频中央仍清晰可见，无文字遮挡
  */
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { HERO } from "@/lib/copy";
 import { HERO_SPLIT } from "@/lib/videos";
-
-/** 仅桌面端慢放：移动端 WebKit 在非 1 的 playbackRate 下常阻断静音自动播放，出现需手动点播放。 */
-function applyHeroPlaybackRate(video: HTMLVideoElement) {
-  if (typeof window === "undefined") return;
-  const allowSlowMo = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  video.playbackRate = allowSlowMo ? 0.7 : 1;
-}
+import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
+import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useAutoplayVideo(videoRef);
+
   return (
     <section
       id="top"
@@ -28,6 +27,7 @@ export default function Hero() {
     >
       {/* 视频铺满整屏（playbackRate 0.7 慢播） */}
       <video
+        ref={videoRef}
         src={HERO_SPLIT.rightVideo}
         poster={HERO_SPLIT.rightPoster}
         muted
@@ -35,34 +35,11 @@ export default function Hero() {
         autoPlay
         playsInline
         preload="auto"
-        onLoadedMetadata={(e) => {
-          applyHeroPlaybackRate(e.currentTarget);
-        }}
-        onPlay={(e) => {
-          applyHeroPlaybackRate(e.currentTarget);
-        }}
         className="absolute inset-x-0 bottom-0 top-[88px] h-[calc(100%-88px)] w-full object-cover"
         style={{ objectPosition: "50% 65%" }}
       />
 
-      {/* 仅左侧白雾，让视频右侧主体（人物/影像）完全暴露 */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.42) 28%, rgba(255,255,255,0.15) 48%, rgba(255,255,255,0.0) 62%)",
-        }}
-      />
-      {/* 底部薄白雾，给底栏 marquee 留呼吸 */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[24%]"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0.0) 100%)",
-        }}
-      />
+      <HeroVideoLightOverlays />
 
       {/* 彩色光晕 — 关于深至同款多彩，但放在两侧不遮中央 */}
       <div

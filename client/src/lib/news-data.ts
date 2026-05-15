@@ -15,6 +15,37 @@ export type NewsItem = {
   cover: string;
 };
 
+export type NewsCategory = "深至故事" | "社会责任" | "媒体报道";
+
+export type NewsFeedItem = NewsItem & { tag: NewsCategory };
+
+/** 将展示日期（如 2025 · 11）转为可排序整数，越大越新 */
+export function newsDateSortKey(dateStr: string): number {
+  const ym = dateStr.match(/^(\d{4})\s*·\s*(\d{2})/);
+  if (ym) return parseInt(ym[1], 10) * 100 + parseInt(ym[2], 10);
+  const digits = dateStr.replace(/\D/g, "");
+  if (digits.length >= 6) return parseInt(digits.slice(0, 6), 10);
+  return 0;
+}
+
+/** 深至故事 + 社会责任 + 媒体报道，按发布时间倒序 */
+export function buildNewsFeed(): NewsFeedItem[] {
+  const withMeta = (
+    items: NewsItem[],
+    tag: NewsCategory
+  ): (NewsFeedItem & { ord: number })[] =>
+    items.map((n, ord) => ({ ...n, tag, ord }));
+
+  return [...withMeta(NEWS_ITEMS, "深至故事"), ...withMeta(CSR_ITEMS, "社会责任"), ...withMeta(MEDIA_ITEMS, "媒体报道")]
+    .sort((a, b) => {
+      const ka = newsDateSortKey(a.date);
+      const kb = newsDateSortKey(b.date);
+      if (kb !== ka) return kb - ka;
+      return a.ord - b.ord;
+    })
+    .map(({ ord: _ord, ...item }) => item);
+}
+
 function fmt(raw: string): string {
   if (raw.length === 8) return `${raw.slice(0, 4)} · ${raw.slice(4, 6)}`;
   return raw;

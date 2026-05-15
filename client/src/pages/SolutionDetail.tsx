@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Sparkle } from "lucide-react";
 import { Link, useLocation } from "wouter";
@@ -6,6 +6,8 @@ import Navbar from "@/components/site/Navbar";
 import { SOLUTION_DETAILS, type Audience } from "@/lib/solutions";
 import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
 import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
+import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
+import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 // 三个 Solution 子页 hero 资源 + tone（黑/白交错）
 const SOLUTION_HERO_VIDEO: Record<Audience, string> = {
@@ -27,6 +29,8 @@ const SOLUTION_HERO_TONE: Record<Audience, "dark" | "light"> = {
 
 export default function SolutionDetail({ audience }: { audience: Audience }) {
   const d = SOLUTION_DETAILS[audience];
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  useAutoplayVideo(heroVideoRef);
   const pillarCountZh =
     d.pillars.length === 3 ? "三" : d.pillars.length === 4 ? "四" : d.pillars.length === 5 ? "五" : String(d.pillars.length);
   const [loc] = useLocation();
@@ -45,13 +49,9 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
         void tone;
         const isDark = false;
         return (
-      <section
-        className={
-          "relative isolate overflow-hidden min-h-[78vh] lg:min-h-[82vh] " +
-          (isDark ? "bg-[#0B0F1E] text-white" : "bg-[#F4F1EA] text-foreground")
-        }
-      >
+      <section className="relative isolate overflow-hidden min-h-screen flex flex-col bg-[#F4F1EA] text-foreground">
         <video
+          ref={heroVideoRef}
           src={SOLUTION_HERO_VIDEO[audience]}
           poster={SOLUTION_HERO_POSTER[audience]}
           muted
@@ -59,31 +59,19 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
           autoPlay
           playsInline
           preload="auto"
-          className="absolute inset-0 h-full w-full object-cover opacity-[0.92]"
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: "50% 55%" }}
         />
-        {isDark ? (
-          <>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F1E]/90 via-[#0B0F1E]/55 to-[#0B0F1E]/25" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F1E]/55 via-transparent to-[#0B0F1E]/85" />
-          </>
-        ) : (
-          <>
-            <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/65 to-white/30" />
-            <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-transparent to-white/85" />
-          </>
-        )}
+        <HeroVideoLightOverlays />
         <div
           aria-hidden
-          className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full opacity-50 blur-3xl"
+          className="pointer-events-none absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full opacity-50 blur-3xl"
           style={{ background: `radial-gradient(closest-side, ${d.accent}66, transparent)` }}
         />
-        <div className="relative container pt-28 lg:pt-36 pb-20 lg:pb-28">
+        <div className="relative z-10 flex flex-1 flex-col justify-end container pt-28 lg:pt-36 pb-16 lg:pb-20">
           <Link
             href="/"
-            className={
-              "inline-flex items-center gap-1.5 text-[13px] mb-8 " +
-              (isDark ? "text-white/65 hover:text-white" : "text-foreground/55 hover:text-[#1E6BFF]")
-            }
+            className="inline-flex items-center gap-1.5 text-[13px] mb-6 text-foreground/55 hover:text-[#1E6BFF]"
           >
             <ArrowLeft className="h-4 w-4" />
             返回首页
@@ -92,22 +80,15 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
             <div
               className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] tracking-[0.22em] uppercase font-display backdrop-blur"
               style={{
-                color: isDark ? "#fff" : d.accent,
-                background: isDark ? `${d.accent}33` : `${d.accent}1A`,
+                color: d.accent,
+                background: `${d.accent}1A`,
                 border: `1px solid ${d.accent}99`,
               }}
             >
               <Sparkle className="h-3 w-3" />
               {d.audienceLabel} · {d.code}
             </div>
-            <h1
-              className={
-                "mt-5 font-zh text-[40px] lg:text-[64px] leading-[1.1] font-black tracking-tight " +
-                (isDark
-                  ? "text-white [text-shadow:_0_2px_24px_rgba(0,0,0,0.45)]"
-                  : "text-foreground")
-              }
-            >
+            <h1 className="mt-5 font-zh text-[34px] sm:text-[40px] lg:text-[56px] leading-[1.08] font-black tracking-tight text-foreground">
               {d.productName}
             </h1>
             <div
@@ -116,14 +97,7 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
             >
               {d.headline}
             </div>
-            <p
-              className={
-                "mt-6 max-w-2xl text-[15px] lg:text-[16px] leading-[1.95] font-zh " +
-                (isDark
-                  ? "text-white/80 [text-shadow:_0_1px_10px_rgba(0,0,0,0.35)]"
-                  : "text-foreground/70")
-              }
-            >
+            <p className="mt-6 max-w-2xl text-[15px] lg:text-[16px] leading-[1.95] font-zh text-foreground/72">
               {d.intro}
             </p>
           </div>

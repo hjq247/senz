@@ -7,6 +7,7 @@
  *  · 动效：仅靠视频自身循环 + 容器淡入上移，不堆砌额外动画。
  */
 import { useEffect, useRef } from "react";
+import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 interface VideoCardProps {
   src: string;
@@ -38,6 +39,7 @@ export default function VideoCard({
   softWash = false,
 }: VideoCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  useAutoplayVideo(videoRef);
 
   useEffect(() => {
     const v = videoRef.current;

@@ -372,7 +372,7 @@ export const CAREERS = {
 };
 
 export const CONTACT = {
-  title: "联系我们",
+  title: "总部地址",
   bullets: [
     "各业务线联系邮箱（需补充）",
     "联系方式：如有座机电话",
@@ -392,7 +392,8 @@ export const ABOUT_SECTIONS = [
   { id: "culture", label: "公司文化",     en: "Culture",              desc: "使命、愿景与价值观，构成深至的精神内核。" },
   { id: "history", label: "发展历程",     en: "History",              desc: "自 2018 年成立至今的关键里程碑与资本路径。" },
   { id: "honors",  label: "资质荣誉",     en: "Honors",               desc: "国家高新技术企业、国家级专精特新小巨人等行业认证。" },
-  { id: "ip",      label: "知识产权",     en: "Intellectual Property", desc: "覆盖 AI 算法、医疗器械、临床方案的多项专利与软著。" },
+  { id: "news",    label: "新闻中心",     en: "News Center",          desc: "深至故事、社会责任与媒体报道，按发布时间更新。" },
+  { id: "address", label: "总部地址",     en: "Headquarters" },
 ] as const;
 
 export const HONORS = [
@@ -409,12 +410,6 @@ export const IP_HIGHLIGHTS = [
   { k: "医疗器械专利",  v: "便携超声、便携 MR 等硬件结构与方法专利" },
   { k: "软件著作权",    v: "Neuro AI 大脑、橙欣 / 暖欣 / 信欣三大智能体相关软著" },
 ];
-
-export const NEWS_SECTIONS = [
-  { id: "stories", label: "深至故事", en: "Stories", desc: "包括但不限于公司融资、业务产品发布、重大合作、资质获取等信息发布。" },
-  { id: "csr", label: "社会责任", en: "Social Responsibility", desc: "深至在公益、基层医疗与健康教育等领域的持续投入。" },
-  { id: "media", label: "媒体报道", en: "Media Coverage", desc: "媒体对公司的报道与转载。" },
-] as const;
 
 export const CAREERS_SECTIONS = [
   { id: "office",   label: "办公环境", en: "Workspace", desc: "上海总部及各地研发中心的办公空间与基础设施。" },
@@ -441,6 +436,7 @@ export const CONTACT_DETAILS = {
 export const PLATFORM_SECTIONS = [
   { id: "terminal", label: "原生 AI 终端体系",   en: "AI-Native Terminals" },
   { id: "neuro",    label: "健康管理协同系统",   en: "Neuro AI Network" },
+  { id: "ip",       label: "知识产权",           en: "Intellectual Property" },
 ] as const;
 
 export const PRODUCTS_SECTIONS = [
@@ -476,10 +472,20 @@ export const NOW_DOING = {
 
 
 // ============================================================
-// v1.5 — Contact 一级页（当前仅总部地址 + 地图，无二级锚点导航）
+// 总部地图（OpenStreetMap 嵌入，与 about#address 区块共用坐标）
 // ============================================================
 
-// 让 CONTACT 直接拥有 .email/.phone/.address，便于详情页快速展示
+const HQ_LAT = 31.17035;
+const HQ_LNG = 121.48725;
+
+export const HQ_MAP = {
+  lat: HQ_LAT,
+  lng: HQ_LNG,
+  embedSrc: `https://www.openstreetmap.org/export/embed.html?bbox=${HQ_LNG - 0.015}%2C${HQ_LAT - 0.01}%2C${HQ_LNG + 0.015}%2C${HQ_LAT + 0.01}&layer=mapnik&marker=${HQ_LAT}%2C${HQ_LNG}`,
+  fullMap: `https://www.openstreetmap.org/?mlat=${HQ_LAT}&mlon=${HQ_LNG}#map=16/${HQ_LAT}/${HQ_LNG}`,
+} as const;
+
+/** 总部地址等（邮箱/电话可用于其它模块或邮件模板，官网总部区块仅展示地址与地图） */
 export const CONTACT_INFO = {
   email: CONTACT_DETAILS.emails[0]?.v ?? "business@senzco.com",
   phone: CONTACT_DETAILS.phones[0]?.v ?? "+86 21-8888-8888",

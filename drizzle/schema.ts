@@ -25,4 +25,23 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/** 官网新闻：由微信公众号「发布」列表同步 */
+export const articleCategories = ["stories", "csr", "media"] as const;
+export type ArticleCategory = (typeof articleCategories)[number];
+
+export const articles = mysqlTable("articles", {
+  id: int("id").autoincrement().primaryKey(),
+  /** 微信 article_id + 多图文序号，如 `ARTICLE_ID#0` */
+  wechatArticleId: varchar("wechatArticleId", { length: 128 }).notNull().unique(),
+  title: varchar("title", { length: 512 }).notNull(),
+  summary: text("summary"),
+  coverUrl: varchar("coverUrl", { length: 2048 }),
+  link: varchar("link", { length: 2048 }).notNull(),
+  category: mysqlEnum("category", articleCategories).default("stories").notNull(),
+  publishedAt: timestamp("publishedAt").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Article = typeof articles.$inferSelect;
+export type InsertArticle = typeof articles.$inferInsert;

@@ -1,6 +1,6 @@
 /**
  * Senz · v1.5 共用页面外壳
- * - 顶部导航 6 个一级
+ * - 顶部导航：首页 / 平台技术 / 解决方案 / 关于深至 / 加入我们
  * - 页脚：横向多列，每列一级入口 + 纵向子链（与顶栏一致）
  * - 路由切换后同步滚顶（useLayoutEffect + instant，避免跨页先闪一帧再跳）
  */
@@ -22,9 +22,7 @@ function routeToHero(loc: string): HeroKey | null {
   if (loc.startsWith("/products/industry") || loc.startsWith("/solutions/industry")) return "industry";
   if (loc.startsWith("/products")) return "products";
   if (loc.startsWith("/about")) return "about";
-  if (loc.startsWith("/news")) return "news";
   if (loc.startsWith("/careers")) return "careers";
-  if (loc.startsWith("/contact")) return "contact";
   return null;
 }
 

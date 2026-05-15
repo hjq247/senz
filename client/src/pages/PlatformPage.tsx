@@ -3,6 +3,7 @@
  * - PageHero
  * - 原生 AI 终端体系（多模态影像终端矩阵）
  * - 健康管理协同系统：Neuro AI（4 智能体）
+ * - 知识产权（专利展示）
  */
 import { motion } from "framer-motion";
 import { Activity, Brain, Stethoscope, Briefcase, ArrowUpRight } from "lucide-react";
@@ -11,8 +12,10 @@ import PageHero from "@/components/layout/PageHero";
 import SectionHeader from "@/components/layout/SectionHeader";
 import PlatformSpline3D from "@/components/site/PlatformSpline3D";
 import PlatformProjectSection from "@/components/site/PlatformProjectSection";
+import PatentSwiperSection from "@/components/site/PatentSwiperSection";
 import { TERMINAL, NEURO, PLATFORM_SECTIONS } from "@/lib/copy";
 import { HERO_VIDEOS, HERO_POSTERS, VIDEOS } from "@/lib/videos";
+import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
@@ -116,9 +119,8 @@ export default function PlatformPage() {
             preload="auto"
             className="absolute inset-0 h-full w-full object-cover opacity-90 mix-blend-screen"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F1E]/85 via-transparent to-[#0B0F1E]/85" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F1E]/40 via-transparent to-[#0B0F1E]/60" />
-          <div className="relative h-full container flex flex-col justify-center">
+          <HeroVideoLightOverlays />
+          <div className="relative z-10 h-full container flex flex-col justify-end pb-10 sm:pb-12 lg:pb-14">
             <div className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/65 font-display">
               Neuro AI · In Motion
             </div>
@@ -264,6 +266,9 @@ export default function PlatformPage() {
           </div>
         </div>
       </section>
+
+      {/* ============== 3. 知识产权 ============== */}
+      <PatentSwiperSection />
     </PageShell>
   );
 }

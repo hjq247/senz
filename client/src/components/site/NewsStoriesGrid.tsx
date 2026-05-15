@@ -1,22 +1,35 @@
 /**
- * 深至故事：大屏 5 列 × 2 行（每页 10 条）+ 分页；上图下文，无帘幕。
+ * 新闻中心：大屏 4 列 × 2 行（每页 8 条）+ 分页，按发布时间倒序；
+ * 卡片标题前展示分类 tag（深至故事 / 社会责任 / 媒体报道）。
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { NewsCategory } from "@/lib/news-data";
 
 export type StoryItem = {
   title: string;
   date: string;
   link: string;
   cover: string;
+  tag: NewsCategory;
 };
 
-const PAGE_SIZE = 10;
+const TAG_CLASS: Record<NewsCategory, string> = {
+  深至故事: "bg-[#EEF4FF] text-[#1E6BFF]",
+  社会责任: "bg-[#FFF0F6] text-[#DB2777]",
+  媒体报道: "bg-[#F3EEFF] text-[#7C3AED]",
+};
+
+const PAGE_SIZE = 8;
 
 export default function NewsStoriesGrid({ stories }: { stories: StoryItem[] }) {
   const totalPages = Math.max(1, Math.ceil(stories.length / PAGE_SIZE));
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setPage(0);
+  }, [stories]);
 
   const pageStories = useMemo(() => {
     const start = page * PAGE_SIZE;
@@ -25,38 +38,65 @@ export default function NewsStoriesGrid({ stories }: { stories: StoryItem[] }) {
 
   return (
     <div className="mt-12">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 justify-items-center">
         {pageStories.map((n, i) => (
-          <motion.a
+          <motion.div
             key={`${n.link}-${page}`}
-            href={n.link}
-            target="_blank"
-            rel="noopener noreferrer"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.45, delay: (i % PAGE_SIZE) * 0.04 }}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-[0_10px_32px_-24px_rgba(30,107,255,0.22)] transition-all hover:border-[#1E6BFF]/25 hover:shadow-[0_16px_40px_-20px_rgba(80,70,180,0.28)]"
+            className="w-full max-w-[12.25rem] sm:max-w-[12.75rem] lg:max-w-[13.125rem]"
           >
-            <div className="relative h-[76px] w-full shrink-0 overflow-hidden bg-gradient-to-br from-[#F0E8FF]/50 via-[#EEF6FF]/45 to-[#FFE8F4]/50 sm:h-[84px]">
-              <img
-                src={n.cover}
-                alt=""
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+            <a
+              href={n.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative isolate flex w-full flex-col overflow-hidden border border-[#EDE4F0] p-1 shadow-[0_6px_22px_-18px_rgba(140,100,180,0.1)]"
+            >
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[#FDF2F8] to-[#F5F3FF]"
               />
-            </div>
-            <div className="flex flex-1 flex-col justify-start border-t border-border/50 bg-gradient-to-b from-white to-[#FAFAFC] px-2.5 py-2 sm:px-3 sm:py-2.5">
-              <p className="font-zh text-[11.5px] sm:text-[12.5px] font-bold leading-snug text-foreground line-clamp-2 min-h-[2.5rem]">
-                {n.title}
-              </p>
-              <div className="mt-1.5 flex items-center gap-1 text-[10px] text-foreground/45">
-                <Calendar className="h-3 w-3 shrink-0" />
-                {n.date}
+              <span aria-hidden className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
+                <span className="absolute inset-0 origin-top scale-y-0 bg-gradient-to-b from-[#FBCFE8] via-[#EDE9FE] to-[#DDD6FE] transition-transform duration-500 ease-out will-change-transform group-hover:scale-y-100" />
+              </span>
+              <div className="relative z-10 flex flex-col">
+                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden p-3 sm:p-3.5">
+                  <img
+                    src={n.cover}
+                    alt=""
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    className="relative z-10 max-h-full max-w-full object-contain object-center"
+                  />
+                </div>
+
+                <div className="relative z-10 w-full pt-1.5 pb-1 sm:pt-2 sm:pb-1.5">
+                  <p className="font-zh text-[11px] leading-relaxed text-foreground/45 sm:text-[12px] transition-colors duration-300 group-hover:text-[#9333EA]/75">
+                    {n.date}
+                  </p>
+                  <div className="mt-1 flex items-start gap-1">
+                    <div className="min-w-0 flex-1">
+                      <span
+                        className={`mb-1 inline-block rounded px-1.5 py-0.5 text-[9px] font-medium font-zh sm:text-[10px] ${TAG_CLASS[n.tag]}`}
+                      >
+                        {n.tag}
+                      </span>
+                      <p className="font-zh text-[13px] font-bold leading-snug text-foreground sm:text-[14px] line-clamp-2 transition-colors duration-300 group-hover:text-[#7E22CE]">
+                        {n.title}
+                      </p>
+                    </div>
+                    <ChevronRight
+                      className="mt-0.5 h-3.5 w-3.5 shrink-0 text-foreground/30 transition-colors duration-300 group-hover:text-[#8B5CF6] sm:h-4 sm:w-4"
+                      strokeWidth={2}
+                      aria-hidden
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.a>
+            </a>
+          </motion.div>
         ))}
       </div>
 

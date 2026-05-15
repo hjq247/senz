@@ -140,7 +140,7 @@ export default function HomeNowDoing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: 0.12 }}
-              className="lg:col-span-4 relative rounded-3xl text-white p-7 overflow-hidden"
+              className="lg:col-span-4 relative flex min-h-[200px] flex-col items-center justify-center rounded-3xl text-white p-7 overflow-hidden text-center"
               style={{
                 background:
                   "linear-gradient(135deg, #0E1330 0%, #2B2870 70%, #4D2A88 100%)",
@@ -154,17 +154,14 @@ export default function HomeNowDoing() {
                     "radial-gradient(closest-side, rgba(255,119,195,0.4), transparent)",
                 }}
               />
-              <div className="relative">
-                <div className="flex items-center gap-2 font-display text-[10.5px] uppercase tracking-[0.28em] text-white/70">
+              <div className="relative flex flex-col items-center">
+                <div className="flex items-center justify-center gap-2 font-display text-[10.5px] uppercase tracking-[0.28em] text-white/70">
                   <Activity className="h-3.5 w-3.5" />
                   Now 03
                 </div>
                 <div className="mt-3 font-zh text-[22px] font-black leading-snug">
                   {items[2].k}
                 </div>
-                <p className="mt-3 text-[13px] leading-[1.85] text-white/75 font-zh">
-                  {items[2].v}
-                </p>
               </div>
             </motion.div>
           )}
@@ -253,19 +250,12 @@ export default function HomeNowDoing() {
               </div>
             </div>
           </div>
-          <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-4">
+          <div className="lg:col-span-4 flex items-stretch">
             <Link
               href="/about"
-              className="group rounded-3xl bg-foreground text-background px-6 py-5 flex items-center justify-between hover:bg-[#1E6BFF] transition-colors"
+              className="group flex w-full items-center justify-between rounded-3xl bg-foreground px-6 py-5 text-background transition-colors hover:bg-[#1E6BFF]"
             >
               <span className="font-zh text-[14px] font-medium">了解 关于深至</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-            <Link
-              href="/contact"
-              className="group rounded-3xl border border-foreground/15 bg-white px-6 py-5 flex items-center justify-between hover:border-[#1E6BFF] hover:text-[#1E6BFF] transition-colors"
-            >
-              <span className="font-zh text-[14px] font-medium">联系我们</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </div>

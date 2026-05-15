@@ -1,59 +1,28 @@
 /**
  * 首页 · 最新动态（teaser）
  * 静态展示「新闻动态 + 社会责任」中日期最近的 3 条，点击卡片在新标签页打开原文链接。
- * 缩略图与新闻中心列表（PreviewStoryMedia · row）同尺寸与逻辑：优先使用 news-data 内固化的 cover。
+ * 缩略图与关于页列表（PreviewStoryMedia · row）同尺寸与逻辑：优先使用 news-data 内固化的 cover。
  */
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { Link } from "wouter";
 import { PreviewStoryMedia } from "@/components/site/PreviewStoryMedia";
-import { NEWS_ITEMS, CSR_ITEMS } from "@/lib/news-data";
+import { buildNewsFeed, type NewsCategory } from "@/lib/news-data";
 
 type Item = {
   title: string;
-  tag: string;
+  tag: NewsCategory;
   date: string;
   anchor: string;
-  ord: number;
-  kind: "news" | "csr";
   cover?: string;
 };
 
-function parseYearMonth(dateStr: string): number {
-  const m = dateStr.match(/^(\d{4})\s*·\s*(\d{2})/);
-  return m ? parseInt(m[1], 10) * 100 + parseInt(m[2], 10) : 0;
-}
-
-function buildLatestThree(): Item[] {
-  const stories: Item[] = NEWS_ITEMS.map((n, i) => ({
-    title: n.title,
-    tag: "新闻动态",
-    date: n.date,
-    anchor: n.link,
-    ord: i,
-    kind: "news" as const,
-    cover: n.cover,
-  }));
-  const media: Item[] = CSR_ITEMS.map((n, i) => ({
-    title: n.title,
-    tag: "社会责任",
-    date: n.date,
-    anchor: n.link,
-    ord: i,
-    kind: "csr" as const,
-    cover: n.cover,
-  }));
-  return [...stories, ...media]
-    .sort((a, b) => {
-      const ka = parseYearMonth(a.date);
-      const kb = parseYearMonth(b.date);
-      if (kb !== ka) return kb - ka;
-      if (a.kind !== b.kind) return a.kind === "news" ? -1 : 1;
-      return a.ord - b.ord;
-    })
-    .slice(0, 3);
-}
-
-const LATEST = buildLatestThree();
+const LATEST: Item[] = buildNewsFeed().slice(0, 3).map((n) => ({
+  title: n.title,
+  tag: n.tag,
+  date: n.date,
+  anchor: n.link,
+  cover: n.cover,
+}));
 
 function Card({
   item,
@@ -67,9 +36,7 @@ function Card({
       href={item.anchor}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group flex items-center gap-4 lg:gap-6 overflow-hidden rounded-2xl border border-border bg-white px-5 lg:px-8 py-4 transition-all hover:shadow-[0_30px_60px_-30px_rgba(80,70,180,0.35)] ${
-        item.kind === "csr" ? "hover:bg-[#FFF8FB]" : "hover:bg-[#F8F6FF]"
-      }`}
+      className="group flex items-center gap-4 lg:gap-6 overflow-hidden rounded-2xl border border-border bg-white px-5 lg:px-8 py-4 transition-all hover:bg-[#F8F6FF] hover:shadow-[0_30px_60px_-30px_rgba(80,70,180,0.35)]"
     >
       <PreviewStoryMedia
         title={item.title}
@@ -77,7 +44,7 @@ function Card({
         dataCover={item.cover}
         ogImage={ogImage}
         layout="row"
-        tone={item.kind === "csr" ? "csr" : "news"}
+        tone={item.tag === "社会责任" ? "csr" : "news"}
       />
       <div className="flex min-w-0 flex-1 flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-3">
@@ -91,10 +58,12 @@ function Card({
           </div>
         </div>
         <h3
-          className={`font-zh text-[15.5px] font-bold leading-snug line-clamp-3 transition-colors ${
-            item.kind === "csr"
-              ? "text-foreground group-hover:text-[#FF77C3]"
-              : "text-foreground group-hover:text-[#1E6BFF]"
+          className={`font-zh text-[15.5px] font-bold leading-snug line-clamp-3 transition-colors text-foreground ${
+            item.tag === "社会责任"
+              ? "group-hover:text-[#FF77C3]"
+              : item.tag === "媒体报道"
+                ? "group-hover:text-[#7C3AED]"
+                : "group-hover:text-[#1E6BFF]"
           }`}
         >
           {item.title}
@@ -102,9 +71,11 @@ function Card({
       </div>
       <ArrowUpRight
         className={`h-4 w-4 shrink-0 transition-colors ${
-          item.kind === "csr"
+          item.tag === "社会责任"
             ? "text-foreground/25 group-hover:text-[#FF77C3]"
-            : "text-foreground/30 group-hover:text-[#1E6BFF]"
+            : item.tag === "媒体报道"
+              ? "text-foreground/25 group-hover:text-[#7C3AED]"
+              : "text-foreground/30 group-hover:text-[#1E6BFF]"
         }`}
       />
     </a>
@@ -121,17 +92,17 @@ export default function HomeNewsTeaser() {
         <div className="flex items-end justify-between gap-6 flex-wrap">
           <div className="max-w-2xl">
             <div className="text-[12px] font-medium uppercase tracking-[0.28em] text-foreground/55 font-display">
-              04 · Newsroom
+              关于 · 动态
             </div>
             <h2 className="mt-4 font-zh text-[32px] lg:text-[46px] leading-[1.12] font-black tracking-tight">
               最新动态
             </h2>
           </div>
           <Link
-            href="/news"
+            href="/about#news"
             className="group inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-5 py-2.5 text-[13px] font-medium text-foreground hover:border-[#1E6BFF] hover:text-[#1E6BFF] transition-colors"
           >
-            进入 新闻中心
+            查看全部动态
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
@@ -141,7 +112,7 @@ export default function HomeNewsTeaser() {
         <div className="grid gap-5 grid-cols-1">
           {LATEST.map((item) => (
             <Card
-              key={`${item.kind}-${item.ord}-${item.anchor}`}
+              key={`${item.tag}-${item.anchor}`}
               item={item}
               ogImage={null}
             />
