@@ -27,8 +27,8 @@ export const VIDEO_POSTERS = {
 
 /** 各页面 Hero 真人实拍背景视频（faststart 版本） */
 export const HERO_VIDEOS = {
-  /** 首页视频4.mp4 → manus-storage 规范命名（v10） */
-  home: "/manus-storage/senz_hero_home_v10_e42264da.mp4",
+  /** 首页视频-1.mp4（11s）→ manus-storage 规范命名（v11） */
+  home: "/manus-storage/senz_hero_home_v11_8cb6030c.mp4",
   /** 飞书20260512-112037.mp4 截取 0:51–1:09（18s），H.264 + faststart */
   platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91.mp4",
   products: "/manus-storage/hero_products_live_90fb4cd2.mp4",
@@ -42,7 +42,7 @@ export const HERO_VIDEOS = {
 
 /** 与 HERO_VIDEOS 一一对应的同色系首帧 webp 静态图（~40-80KB） */
 export const HERO_POSTERS = {
-  home: "/manus-storage/senz_hero_home_v10_e42264da.png",
+  home: "/manus-storage/senz_hero_home_v11_8cb6030c.png",
   platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91.webp",
   products: "/manus-storage/hero_products_live_31494b85.webp",
   patient: "/manus-storage/hero_patient_live_a334c03e.webp",
@@ -55,11 +55,10 @@ export const HERO_POSTERS = {
 
 export type HeroKey = keyof typeof HERO_VIDEOS;
 
-/** 首页 Hero 主视频（首页视频4 素材 · v10）；双字段同址，保留 leftVideo 字段名兼容旧调用
- * 若仅更换 mp4，请从新视频截取首帧覆盖 `senz_hero_home_v10_e42264da.png`，与 `client/index.html` preload 一致。 */
+/** 首页 Hero 主视频（首页视频-1 · v11）；双字段同址，保留 leftVideo 字段名兼容旧调用 */
 export const HERO_SPLIT = {
-  leftVideo: "/manus-storage/senz_hero_home_v10_e42264da.mp4",
-  leftPoster: "/manus-storage/senz_hero_home_v10_e42264da.png",
-  rightVideo: "/manus-storage/senz_hero_home_v10_e42264da.mp4",
-  rightPoster: "/manus-storage/senz_hero_home_v10_e42264da.png",
+  leftVideo: "/manus-storage/senz_hero_home_v11_8cb6030c.mp4",
+  leftPoster: "/manus-storage/senz_hero_home_v11_8cb6030c.png",
+  rightVideo: "/manus-storage/senz_hero_home_v11_8cb6030c.mp4",
+  rightPoster: "/manus-storage/senz_hero_home_v11_8cb6030c.png",
 } as const;

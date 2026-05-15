@@ -140,7 +140,7 @@ export default function HomeNowDoing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: 0.12 }}
-              className="lg:col-span-4 relative flex min-h-[200px] flex-col items-center justify-center rounded-3xl text-white p-7 overflow-hidden text-center"
+              className="lg:col-span-4 relative flex min-h-[200px] flex-col items-start justify-center rounded-3xl text-white p-7 overflow-hidden"
               style={{
                 background:
                   "linear-gradient(135deg, #0E1330 0%, #2B2870 70%, #4D2A88 100%)",
@@ -154,8 +154,8 @@ export default function HomeNowDoing() {
                     "radial-gradient(closest-side, rgba(255,119,195,0.4), transparent)",
                 }}
               />
-              <div className="relative flex flex-col items-center">
-                <div className="flex items-center justify-center gap-2 font-display text-[10.5px] uppercase tracking-[0.28em] text-white/70">
+              <div className="relative flex flex-col items-start">
+                <div className="flex items-center gap-2 font-display text-[10.5px] uppercase tracking-[0.28em] text-white/70">
                   <Activity className="h-3.5 w-3.5" />
                   Now 03
                 </div>
