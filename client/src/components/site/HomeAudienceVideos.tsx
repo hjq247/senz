@@ -21,8 +21,9 @@ const ITEMS = [
     en: "Patients",
     zh: "面向患者",
     title: "橙欣健康 Cx",
-    tagline: "贴身的 AI 健康伙伴",
-    desc: "从风险发现到长期跟踪，把零散的医疗服务，聚合为一段可被感知、可被信任的完整健康旅程。",
+    tagline: "做方案依从率最高的患者健康伙伴",
+    desc: "面向慢病人群的数字化健康管理平台，提供持续随访与个性化干预服务，打造患者长期健康管理体系。",
+    cta: "深入了解 慢病管理解决方案",
     href: "/solutions/patient",
     video: VIDEOS.patientLoop,
     poster: VIDEO_POSTERS.patientLoop,
@@ -34,8 +35,9 @@ const ITEMS = [
     en: "Doctors",
     zh: "面向医生",
     title: "暖欣健康 Dx",
-    tagline: "永远不下班的 AI 同事",
-    desc: "智能影像 · 智能病历 · 随访闭环，让每一次诊疗，都更稳、更准、更有把握。",
+    tagline: "做临床采纳率最高的医生临床伙伴",
+    desc: "面向医生的AI临床智能平台，融合真实世界数据与循证医学，辅助诊疗决策与患者全流程管理。",
+    cta: "深入了解 医生临床智能伙伴",
     href: "/solutions/doctor",
     video: VIDEOS.doctorLoop,
     poster: VIDEO_POSTERS.doctorLoop,
@@ -47,8 +49,9 @@ const ITEMS = [
     en: "Pharma",
     zh: "面向药企",
     title: "信欣健康 Px",
-    tagline: "真实世界证据网络",
-    desc: "院外 3.5 万终端 · 千万级数据，沉淀为药企可使用的疗效证据与商业洞察。",
+    tagline: "做疗效改善投资回报率最高的药企价值引擎",
+    desc: "面向药企的真实世界研究与患者管理平台，提供可验证的疗效数据与商业洞察。",
+    cta: "深入了解 药企解决方案",
     href: "/solutions/industry",
     video: VIDEOS.pharmaLoop,
     poster: VIDEO_POSTERS.pharmaLoop,
@@ -98,8 +101,7 @@ export default function HomeAudienceVideos() {
               三端协同 &nbsp;—&nbsp; 患者 · 医生 · 药企
             </div>
             <p className="mt-5 text-[14.5px] leading-[1.85] text-foreground/65 font-zh max-w-2xl">
-              以 Senz Brain · 深小至 为底座，三款智能体在乳腺癌全周期管理的关键节点协同发力——
-              让风险更早被发现、让诊疗更可被信任、让疗效更可被验证。
+              我们以多模态医学影像等客观医疗数据为核心入口，贯通诊断、治疗、随访与疗效评估全流程，构建基于真实世界数据闭环持续进化的医疗智能体体系，让医疗从“过程服务”走向“健康结果的确定性”。
             </p>
           </div>
           <Link
@@ -152,7 +154,12 @@ export default function HomeAudienceVideos() {
                   {it.title}
                 </h3>
                 <div
-                  className="mt-1 font-zh text-[13.5px] font-medium"
+                  className={
+                    "mt-1 font-zh text-[13.5px] font-medium min-w-0 " +
+                    (it.code === "Px"
+                      ? "text-[11.5px] sm:text-[12.5px] lg:text-[13.5px] leading-snug whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                      : "")
+                  }
                   style={{ color: it.text }}
                 >
                   {it.tagline}
@@ -164,7 +171,7 @@ export default function HomeAudienceVideos() {
                   href={it.href}
                   className="mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-medium font-zh text-foreground border-b border-foreground/30 hover:border-foreground transition-colors pb-0.5"
                 >
-                  深入了解 {it.title}
+                  {it.cta}
                   <ArrowUpRight className="h-3.5 w-3.5" />
                 </Link>
               </div>

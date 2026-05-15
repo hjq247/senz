@@ -5,7 +5,9 @@
  *  · 同时支持 poster（同色系首帧静态图），避免弱网/未播放时黑场
  */
 import { motion } from "framer-motion";
+import { useLocation } from "wouter";
 import AuroraBackdrop from "./AuroraBackdrop";
+import { handleInPageHashNav } from "@/lib/inPageHashNav";
 
 type SubItem = { id: string; label: string; en?: string };
 type Tone = "dark" | "light";
@@ -21,6 +23,7 @@ export default function PageHero({
   videoSrc,
   posterSrc,
   tone = "dark",
+  subAnchorBase,
 }: {
   index: string;
   en: string;
@@ -32,7 +35,10 @@ export default function PageHero({
   videoSrc?: string;
   posterSrc?: string;
   tone?: Tone;
+  /** 若传入（如 "/news"），子导航链为 `/news#stories`，便于站内锚点与 wouter 协同。 */
+  subAnchorBase?: string;
 }) {
+  const [loc] = useLocation();
   const isVideo = !!videoSrc;
   // 全站统一明亮彩调：保留 tone 参数但内部一律按 light 渲染
   // （历史上 dark tone 会压深色，现在所有页面都使用浅亮多彩蒙层）
@@ -148,10 +154,17 @@ export default function PageHero({
 
               {subs && subs.length > 0 && (
                 <ul className="mt-8 flex flex-wrap gap-2">
-                  {subs.map((s, i) => (
+                  {subs.map((s, i) => {
+                    const subHref = subAnchorBase
+                      ? `${subAnchorBase.replace(/\/$/, "")}#${s.id}`
+                      : `#${s.id}`;
+                    return (
                     <li key={s.id}>
                       <a
-                        href={`#${s.id}`}
+                        href={subHref}
+                        onClick={(e) =>
+                          subAnchorBase && handleInPageHashNav(e, subHref, loc)
+                        }
                         className={
                           "group inline-flex items-center gap-2 rounded-full backdrop-blur px-4 py-2 text-[13px] font-medium transition-colors " +
                           (dark
@@ -172,7 +185,8 @@ export default function PageHero({
                         <span className="font-zh">{s.label}</span>
                       </a>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               )}
             </motion.div>

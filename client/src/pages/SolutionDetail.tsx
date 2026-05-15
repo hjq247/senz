@@ -4,8 +4,7 @@ import { ArrowLeft, ArrowUpRight, Sparkle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import Navbar from "@/components/site/Navbar";
 import { SOLUTION_DETAILS, type Audience } from "@/lib/solutions";
-import { CONTACT, SYNERGY } from "@/lib/copy";
-import { WHITE_RIBBON, AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
+import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
 import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
 
 // 三个 Solution 子页 hero 资源 + tone（黑/白交错）
@@ -28,6 +27,8 @@ const SOLUTION_HERO_TONE: Record<Audience, "dark" | "light"> = {
 
 export default function SolutionDetail({ audience }: { audience: Audience }) {
   const d = SOLUTION_DETAILS[audience];
+  const pillarCountZh =
+    d.pillars.length === 3 ? "三" : d.pillars.length === 4 ? "四" : d.pillars.length === 5 ? "五" : String(d.pillars.length);
   const [loc] = useLocation();
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
@@ -182,7 +183,7 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
             02 · 我们如何解决
           </div>
           <h2 className="mt-3 font-zh text-[28px] lg:text-[40px] font-black leading-tight max-w-3xl">
-            {d.productName} 的四个支柱
+            {d.productName} 的{pillarCountZh}个核心支柱
           </h2>
           <div className="mt-10 grid lg:grid-cols-12 gap-6">
             <div className="lg:col-span-7 space-y-4">
@@ -343,69 +344,28 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
                     <p className="mt-3 text-[13.5px] leading-[1.95] text-foreground/70 font-zh">{s.v}</p>
                   </motion.div>
                 ))}
-                <div
-                  className="rounded-2xl p-6 lg:p-7 border"
-                  style={{ background: `${d.accent}10`, borderColor: `${d.accent}55` }}
-                >
-                  <div className="text-[11px] uppercase tracking-[0.22em] font-display" style={{ color: d.accent }}>
-                    {d.caseFeelLabel}
-                  </div>
-                  <p className="mt-2 text-[14.5px] leading-[1.95] text-foreground/85 font-zh">
-                    “{d.caseFeel}”
-                  </p>
-                </div>
               </div>
             </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, ease: "easeOut" as const }}
+              className="mt-12 rounded-[32px] border border-border bg-gradient-to-r from-white via-[#FAF8FF] to-[#EAF2FF] px-8 py-10 lg:px-16 lg:py-14 shadow-[0_24px_60px_-40px_rgba(80,70,180,0.2)]"
+            >
+              <div
+                className="text-[12px] uppercase tracking-[0.28em] font-display font-semibold"
+                style={{ color: d.accent }}
+              >
+                {d.caseFeelLabel}
+              </div>
+              <p className="mt-5 font-zh text-[20px] sm:text-[24px] lg:text-[32px] leading-[1.45] text-foreground font-semibold tracking-tight">
+                “{d.caseFeel}”
+              </p>
+            </motion.div>
           </div>
         </section>
       )}
-
-      {/* THREE-END SYNERGY (跨详情页复用、提醒三端闭环) */}
-      <section className="relative bg-[#F7F5FF] py-20 lg:py-28">
-        <div className="container">
-          <div className="text-[12px] font-medium uppercase tracking-[0.25em] text-foreground/55 font-display">
-            05 · 三端协同
-          </div>
-          <h2 className="mt-3 font-zh text-[28px] lg:text-[40px] font-black leading-tight max-w-3xl">
-            {SYNERGY.title}
-          </h2>
-          <p className="mt-4 max-w-3xl text-[14px] leading-[1.95] text-foreground/65 font-zh">{SYNERGY.desc}</p>
-          <div className="mt-10 grid lg:grid-cols-3 gap-4">
-            {SYNERGY.items.map((it: { k: string; v: string }, i: number) => (
-              <motion.div
-                key={it.k}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.55, delay: i * 0.07, ease: "easeOut" as const }}
-                whileHover={{ y: -4 }}
-                className="rounded-2xl border border-border bg-white p-6"
-              >
-                <div className="font-display text-[12px] tracking-[0.22em] uppercase text-foreground/45">Step 0{i + 1}</div>
-                <h4 className="mt-2 font-zh text-[16.5px] font-black text-foreground leading-snug">{it.k}</h4>
-                <p className="mt-3 text-[12.5px] leading-[1.85] text-foreground/65 font-zh">{it.v}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 原生 AI 终端体系 — 文案 + 矩阵 */}
-      <section className="bg-white text-foreground py-20 lg:py-28 overflow-hidden">
-        <div className="container">
-          <div className="max-w-3xl">
-            <div className="text-[12px] font-medium uppercase tracking-[0.25em] text-[#1E6BFF] font-display">
-              Senz · 原生 AI 终端体系
-            </div>
-            <h2 className="mt-3 font-zh text-[32px] lg:text-[48px] leading-[1.1] font-black tracking-tight text-foreground">
-              影像不只是工具，更是统一的 AI 原生数据入口
-            </h2>
-            <p className="mt-5 text-[14.5px] lg:text-[15.5px] leading-[1.95] text-foreground/65 font-zh max-w-xl">
-              数据质量、维度与连续性，是驱动医疗 AI 向更高智能跃迁的燃料与边界。深至从根本上重塑了影像设备的价值——超声、MR、CT 等终端，已从传统的影像工具，进化为统一的 AI 原生数据入口与智能工作流节点。
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="bg-white py-20 lg:py-28">
@@ -418,9 +378,6 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
               <h3 className="mt-2 font-zh text-[24px] lg:text-[30px] font-black text-foreground leading-snug">
                 与深至一起，把"健康结果"变成可交付的确定性
               </h3>
-              <div className="mt-2 text-[13.5px] text-foreground/65 font-zh">
-                合作邮箱：business@senzco.com · {CONTACT.bullets[2]}
-              </div>
             </div>
             <Link
               href={d.next.href}

@@ -50,7 +50,7 @@ export default function HomeStatsBand() {
             </h2>
           </div>
           <p className="max-w-md text-[13.5px] leading-[1.85] text-foreground/65 font-zh">
-            从院外影像终端到 AI 闭环模型，深至已经把"医学影像 → 诊断 → 治疗 → 随访 → 反馈"完整跑通。
+            通过疗效覆盖，数据覆盖及生态重塑，在2030年让1亿人拥有确定性的健康
           </p>
         </div>
 

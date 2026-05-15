@@ -392,3 +392,9 @@
   animation: office-marquee 60s linear infinite;
   will-change: transform;
 }
+
+/* 员工活动图带：与办公环境同逻辑，视觉向右滚动 */
+.animate-office-marquee-reverse {
+  animation: office-marquee 60s linear infinite reverse;
+  will-change: transform;
+}

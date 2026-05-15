@@ -15,7 +15,6 @@ export const WECHAT_CULTURE_CAROUSEL_IMAGES: string[] = [
   "https://mmecoa.qpic.cn/sz_mmecoa_jpg/85XF10FZBBzUje2dxKD9ZumTCtuGVt9nYWuO3ic7uCe0RkeVJAoqQgpB6SypkWDzCXIxehwoRSIpXsaLvzU8wekkcALTKYg4icia7iaeHUwyUgI/640?wx_fmt=jpeg&from=appmsg",
   "https://mmecoa.qpic.cn/sz_mmecoa_jpg/85XF10FZBByFKUWNicwbO9YazZiaBib7koo9bZZCBibAypuCOenQyd0Il0k6ySo7H3Yy1yhoqY8YbYHcx3mscO89bMegj0uDkg2sDbNHp7vZyeQ/640?wx_fmt=jpeg&from=appmsg",
   "https://mmecoa.qpic.cn/mmecoa_jpg/85XF10FZBByCXmqOqgfK6ianJw6s5S8OJYZkqx5pDCdyhQ5KNGMK6ewiby6xICC8bsFmcwmSj6Cs0rvF3DjJvp1ZujZbOUIjVJ0P7nibMUHUIE/640?wx_fmt=jpeg&from=appmsg",
-  "https://mmecoa.qpic.cn/sz_mmecoa_png/85XF10FZBByLbhkUiakBxQ7eqBcD01dicpX2ibRAH03iawO8RvpQ0AKNzRQrS5riciaCQzpvkLvZZJjdF7aKUOTviczJnbNpFXLPuwo1Ykslq606kc/640?wx_fmt=png&from=appmsg",
 ];
 
 export const WECHAT_CULTURE_VISION_QUOTE =

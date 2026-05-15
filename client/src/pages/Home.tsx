@@ -6,7 +6,6 @@
  *  · Strategy（我们解决什么样的问题）
  *  · HomeCapabilities（核心能力速览）
  *  · HomeAudienceVideos（三端方形循环视频：患者→医生→药企）
- *  · HomeTrust（合作与信任）
  *  · HomeNewsTeaser（最新动态单行滚动）
  *  · HomeNowDoing（深至正在做的）
  */
@@ -17,7 +16,6 @@ import HomeBrandReel from "@/components/site/HomeBrandReel";
 import StrategySection from "@/components/site/StrategySection";
 import HomeCapabilities from "@/components/site/HomeCapabilities";
 import HomeAudienceVideos from "@/components/site/HomeAudienceVideos";
-import HomeTrust from "@/components/site/HomeTrust";
 import HomeNewsTeaser from "@/components/site/HomeNewsTeaser";
 import HomeNowDoing from "@/components/site/HomeNowDoing";
 
@@ -30,7 +28,6 @@ export default function Home() {
       <StrategySection />
       <HomeCapabilities />
       <HomeAudienceVideos />
-      <HomeTrust />
       <HomeNewsTeaser />
       <HomeNowDoing />
     </PageShell>

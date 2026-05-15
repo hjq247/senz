@@ -51,6 +51,7 @@ export default function PlatformPage() {
         videoSrc={HERO_VIDEOS.platform}
         posterSrc={HERO_POSTERS.platform}
         tone="light"
+        subAnchorBase="/platform"
       />
 
       {/* ── 产品背景叙事区：Group-1 顶光 / Group-4 大气光 / Group-5 使用场景 ── */}

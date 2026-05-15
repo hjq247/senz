@@ -13,6 +13,13 @@ import { motion } from "framer-motion";
 import { HERO } from "@/lib/copy";
 import { HERO_SPLIT } from "@/lib/videos";
 
+/** 仅桌面端慢放：移动端 WebKit 在非 1 的 playbackRate 下常阻断静音自动播放，出现需手动点播放。 */
+function applyHeroPlaybackRate(video: HTMLVideoElement) {
+  if (typeof window === "undefined") return;
+  const allowSlowMo = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  video.playbackRate = allowSlowMo ? 0.7 : 1;
+}
+
 export default function Hero() {
   return (
     <section
@@ -28,8 +35,12 @@ export default function Hero() {
         autoPlay
         playsInline
         preload="auto"
-        onLoadedMetadata={(e) => { e.currentTarget.playbackRate = 0.7; }}
-        onPlay={(e) => { e.currentTarget.playbackRate = 0.7; }}
+        onLoadedMetadata={(e) => {
+          applyHeroPlaybackRate(e.currentTarget);
+        }}
+        onPlay={(e) => {
+          applyHeroPlaybackRate(e.currentTarget);
+        }}
         className="absolute inset-x-0 bottom-0 top-[88px] h-[calc(100%-88px)] w-full object-cover"
         style={{ objectPosition: "50% 65%" }}
       />

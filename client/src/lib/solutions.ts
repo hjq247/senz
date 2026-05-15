@@ -158,7 +158,6 @@ export const SOLUTION_DETAILS: Record<Audience, SolutionDetail> = {
     pillars: [
       { k: "RWD 资产", v: "提供合规、可追溯的真实世界数据资产，降低获取成本与合规风险。" },
       { k: "依从性管理", v: "通过持续的患者陪伴与干预，提升患者依从性，让真实世界结果更可衡量。" },
-      { k: "院外拓展", v: "聚焦 10,000 家院外品质医疗终端，提升院外市场拓展效率。" },
       {
         k: "营销可量化",
         v: "把患者支持服务做到规模化，让营销效果从「讲故事」走向「看数据」。",
@@ -167,7 +166,6 @@ export const SOLUTION_DETAILS: Record<Audience, SolutionDetail> = {
     challenges: [
       "真实世界数据获取成本高、合规约束多",
       "患者依从性难以持续",
-      "院外市场拓展效率低",
       "患者支持服务难规模化，营销效果难量化",
     ],
     caseTitle: "典型场景",

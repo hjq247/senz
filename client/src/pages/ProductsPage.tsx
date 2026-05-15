@@ -42,6 +42,7 @@ export default function ProductsPage() {
         videoSrc={HERO_VIDEOS.products}
         posterSrc={HERO_POSTERS.products}
         tone="dark"
+        subAnchorBase="/products"
       />
 
       {/* 三端协同 */}
@@ -137,7 +138,16 @@ export default function ProductsPage() {
                     {d.intro}
                   </p>
 
-                  <div className="mt-9 grid sm:grid-cols-2 gap-3">
+                  <div
+                    className={
+                      "mt-9 grid gap-3 " +
+                      (d.pillars.length <= 3
+                        ? "sm:grid-cols-1 md:grid-cols-3"
+                        : d.pillars.length === 4
+                          ? "sm:grid-cols-2"
+                          : "sm:grid-cols-2 lg:grid-cols-3")
+                    }
+                  >
                     {d.pillars.map((p, i) => (
                       <motion.div
                         key={p.k}

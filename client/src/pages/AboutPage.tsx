@@ -1,10 +1,10 @@
 /**
  * 关于深至
- *  · 公司介绍 / 公司文化（mission+values）/ 发展历程（timeline）/ 资质荣誉 / 知识产权 / 专家合作伙伴
+ *  · 公司介绍 / 公司文化（mission+values）/ 发展历程（timeline）/ 资质荣誉 / 知识产权
  */
 import * as React from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Sparkle, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { Sparkle, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 import PageShell from "@/components/layout/PageShell";
 import PageHero from "@/components/layout/PageHero";
 import SectionHeader from "@/components/layout/SectionHeader";
@@ -14,7 +14,6 @@ import {
   MISSION,
   VALUES,
   TIMELINE_STAGES,
-  EXPERTS_NOTE,
 } from "@/lib/copy";
 import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
 import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
@@ -359,6 +358,7 @@ export default function AboutPage() {
         videoSrc={HERO_VIDEOS.about}
         posterSrc={HERO_POSTERS.about}
         tone="light"
+        subAnchorBase="/about"
       />
 
       {/* 1. 公司介绍 */}
@@ -524,43 +524,6 @@ export default function AboutPage() {
       {/* 5. 知识产权 */}
       <PatentSwiperSection />
 
-      {/* 6. 专家合作伙伴 */}
-      <section id="experts" className="relative scroll-mt-24 bg-white py-24 lg:py-32 overflow-hidden">
-        <div className="container">
-          <SectionHeader index="03.6" en="Expert Partners" title="专家合作伙伴" />
-          <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.55, ease: "easeOut" as const }}
-            className="mt-10 rounded-3xl border border-border bg-gradient-to-r from-[#F4F1FF] via-[#FFF1F6] to-[#EAF2FF] px-8 lg:px-14 py-12"
-          >
-            <div className="flex items-start gap-4">
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1E6BFF] to-[#FF77C3] text-white shrink-0">
-                <Sparkle className="h-5 w-5" />
-              </div>
-              <p className="text-[14.5px] lg:text-[15.5px] leading-[1.95] text-foreground/75 font-zh">
-                {EXPERTS_NOTE}
-              </p>
-            </div>
-
-            <div className="mt-8 grid sm:grid-cols-3 gap-3">
-              {["临床医学 · 一线三甲", "医学影像 · 顶级专家", "AI / 公共卫生 · 学术机构"].map((k, i) => (
-                <div
-                  key={k}
-                  className="rounded-2xl border border-foreground/10 bg-white px-4 py-3 flex items-center gap-2 text-[13px] font-zh"
-                >
-                  <ShieldCheck className="h-4 w-4 text-[#1E6BFF]" />
-                  <span className="text-foreground/75">{k}</span>
-                  <span className="ml-auto font-display text-[10.5px] tracking-[0.2em] text-foreground/35">
-                    0{i + 1}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </PageShell>
   );
 }
