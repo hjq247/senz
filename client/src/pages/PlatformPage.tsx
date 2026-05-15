@@ -15,7 +15,7 @@ import PlatformProjectSection from "@/components/site/PlatformProjectSection";
 import PatentSwiperSection from "@/components/site/PatentSwiperSection";
 import { TERMINAL, NEURO, PLATFORM_SECTIONS } from "@/lib/copy";
 import { HERO_VIDEOS, HERO_POSTERS, VIDEOS } from "@/lib/videos";
-import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
+import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
@@ -119,15 +119,15 @@ export default function PlatformPage() {
             preload="auto"
             className="absolute inset-0 h-full w-full object-cover opacity-90 mix-blend-screen"
           />
-          <HeroVideoLightOverlays />
+          <HeroVideoPageOverlays />
           <div className="relative z-10 h-full container flex flex-col justify-end pb-10 sm:pb-12 lg:pb-14">
-            <div className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/65 font-display">
+            <div className="text-[11px] font-medium uppercase tracking-[0.32em] text-foreground/55 font-display">
               Neuro AI · In Motion
             </div>
-            <h3 className="mt-3 font-zh text-[26px] sm:text-[34px] lg:text-[44px] leading-[1.1] font-black text-white max-w-3xl">
+            <h3 className="mt-3 font-zh text-[24px] sm:text-[30px] lg:text-[38px] leading-[1.1] font-black text-foreground max-w-3xl">
               数据 · 知识 · 决策 — 在一颗大脑里被实时编织
             </h3>
-            <p className="mt-4 max-w-xl text-[13.5px] sm:text-[14.5px] leading-[1.85] text-white/75 font-zh">
+            <p className="mt-4 max-w-xl text-[13.5px] sm:text-[14.5px] leading-[1.85] text-foreground/72 font-zh">
               Neuro AI 是健康管理协同系统的中枢：把多源临床数据、影像、随访行为整合成可追踪的疗效证据。
             </p>
           </div>

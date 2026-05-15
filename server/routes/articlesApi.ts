@@ -67,6 +67,14 @@ function sendDbError(res: Response, err: unknown): void {
 }
 
 export function registerArticlesApi(app: Express): void {
+  app.get("/api/health", (_req, res) => {
+    res.json({
+      ok: true,
+      service: "senz-api",
+      time: new Date().toISOString(),
+    });
+  });
+
   app.use("/api", (req, res, next) => {
     applyCors(req, res);
     if (req.method === "OPTIONS") {

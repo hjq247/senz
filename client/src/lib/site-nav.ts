@@ -31,7 +31,7 @@ export const SITE_NAV: NavItem[] = [
       { label: "发展历程", href: "/about#history" },
       { label: "资质荣誉", href: "/about#honors" },
       { label: "新闻中心", href: "/about#news" },
-      { label: "总部地址", href: "/about#address" },
+      { label: "公司地址", href: "/about#address" },
     ],
   },
   {

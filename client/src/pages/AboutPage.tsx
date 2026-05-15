@@ -1,6 +1,6 @@
 /**
  * 关于深至
- *  · 公司介绍 / 公司文化 / 发展历程 / 资质荣誉 / 新闻中心 / 总部地址
+ *  · 公司介绍 / 公司文化 / 发展历程 / 资质荣誉 / 新闻中心 / 公司地址
  */
 import { useMemo } from "react";
 import { motion } from "framer-motion";
@@ -220,10 +220,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 6. 总部地址（地图内嵌） */}
+      {/* 6. 公司地址（地图内嵌） */}
       <section id="address" className="relative scroll-mt-24 bg-gradient-to-b from-[#F7F5FF] to-white py-24 lg:py-32 overflow-hidden">
         <div className="container">
-          <SectionHeader index="03.8" en="Headquarters" title="总部地址" />
+          <SectionHeader index="03.8" en="Company Address" title="公司地址" />
 
           <div className="mt-12 grid lg:grid-cols-12 gap-5">
             <motion.div

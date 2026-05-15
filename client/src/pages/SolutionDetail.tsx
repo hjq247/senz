@@ -6,7 +6,7 @@ import Navbar from "@/components/site/Navbar";
 import { SOLUTION_DETAILS, type Audience } from "@/lib/solutions";
 import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
 import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
-import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
+import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 // 三个 Solution 子页 hero 资源 + tone（黑/白交错）
@@ -62,7 +62,7 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
           className="absolute inset-0 h-full w-full object-cover"
           style={{ objectPosition: "50% 55%" }}
         />
-        <HeroVideoLightOverlays />
+        <HeroVideoPageOverlays />
         <div
           aria-hidden
           className="pointer-events-none absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full opacity-50 blur-3xl"
@@ -88,7 +88,7 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
               <Sparkle className="h-3 w-3" />
               {d.audienceLabel} · {d.code}
             </div>
-            <h1 className="mt-5 font-zh text-[34px] sm:text-[40px] lg:text-[56px] leading-[1.08] font-black tracking-tight text-foreground">
+            <h1 className="mt-5 font-zh text-[30px] sm:text-[36px] lg:text-[48px] leading-[1.08] font-black tracking-tight text-foreground">
               {d.productName}
             </h1>
             <div

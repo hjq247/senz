@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import AuroraBackdrop from "./AuroraBackdrop";
 import { handleInPageHashNav } from "@/lib/inPageHashNav";
-import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
+import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 type SubItem = {
@@ -70,7 +70,7 @@ export default function PageHero({
             className="absolute inset-0 h-full w-full object-cover"
             style={{ objectPosition: "50% 55%" }}
           />
-          <HeroVideoLightOverlays />
+          <HeroVideoPageOverlays />
           <div
             aria-hidden
             className="pointer-events-none absolute -top-32 -left-32 h-[420px] w-[420px] rounded-full opacity-55 blur-3xl"
@@ -117,7 +117,7 @@ export default function PageHero({
                 <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-[#1E6BFF] to-[#FF77C3]" />
                 {index} · {en}
               </div>
-              <h1 className="mt-5 font-zh text-[34px] sm:text-[40px] lg:text-[56px] xl:text-[64px] leading-[1.08] font-black tracking-tight text-foreground">
+              <h1 className="mt-5 font-zh text-[24px] sm:text-[28px] md:text-[34px] lg:text-[38px] xl:text-[44px] leading-[1.14] font-black tracking-tight text-foreground">
                 {title}
               </h1>
               {desc && (

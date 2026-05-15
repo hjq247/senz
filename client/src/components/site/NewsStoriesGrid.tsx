@@ -1,6 +1,6 @@
 /**
- * 新闻中心：大屏 4 列 × 2 行（每页 8 条）+ 分页，按发布时间倒序；
- * 卡片标题前展示分类 tag（深至故事 / 社会责任 / 媒体报道）。
+ * 新闻中心：大屏 5 列 × 2 行（每页 10 条）+ 分页，按发布时间倒序；
+ * 悬停底色在图文底层展开（scaleY + origin-top）。
  */
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
@@ -21,7 +21,7 @@ const TAG_CLASS: Record<NewsCategory, string> = {
   媒体报道: "bg-[#F3EEFF] text-[#7C3AED]",
 };
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 10;
 
 export default function NewsStoriesGrid({ stories }: { stories: StoryItem[] }) {
   const totalPages = Math.max(1, Math.ceil(stories.length / PAGE_SIZE));
@@ -38,42 +38,43 @@ export default function NewsStoriesGrid({ stories }: { stories: StoryItem[] }) {
 
   return (
     <div className="mt-12">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 justify-items-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
         {pageStories.map((n, i) => (
           <motion.div
             key={`${n.link}-${page}`}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.45, delay: (i % PAGE_SIZE) * 0.04 }}
-            className="w-full max-w-[12.25rem] sm:max-w-[12.75rem] lg:max-w-[13.125rem]"
+            transition={{ duration: 0.45, delay: (i % PAGE_SIZE) * 0.03 }}
+            className="w-full min-w-0"
           >
             <a
               href={n.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative isolate flex w-full flex-col overflow-hidden border border-[#EDE4F0] p-1 shadow-[0_6px_22px_-18px_rgba(140,100,180,0.1)]"
+              className="group relative flex w-full flex-col overflow-hidden border border-[#EDE4F0] p-1 shadow-[0_6px_22px_-18px_rgba(140,100,180,0.1)]"
             >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[#FDF2F8] to-[#F5F3FF]"
-              />
-              <span aria-hidden className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
-                <span className="absolute inset-0 origin-top scale-y-0 bg-gradient-to-b from-[#FBCFE8] via-[#EDE9FE] to-[#DDD6FE] transition-transform duration-500 ease-out will-change-transform group-hover:scale-y-100" />
-              </span>
-              <div className="relative z-10 flex flex-col">
-                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden p-3 sm:p-3.5">
+              {/* 背景层：默认色 + 悬停动画，始终在图文下方 */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+                <span className="absolute inset-0 bg-gradient-to-b from-[#FDF2F8] to-[#F5F3FF]" />
+                <span className="absolute inset-0 overflow-hidden">
+                  <span className="absolute inset-0 origin-top scale-y-0 bg-gradient-to-b from-[#FBCFE8] via-[#EDE9FE] to-[#DDD6FE] transition-transform duration-500 ease-out will-change-transform group-hover:scale-y-100" />
+                </span>
+              </div>
+
+              <div className="relative z-[1] flex flex-col">
+                <div className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden p-2.5 sm:p-3">
                   <img
                     src={n.cover}
                     alt=""
                     referrerPolicy="no-referrer"
                     loading="lazy"
-                    className="relative z-10 max-h-full max-w-full object-contain object-center"
+                    className="max-h-full max-w-full object-contain object-center"
                   />
                 </div>
 
-                <div className="relative z-10 w-full pt-1.5 pb-1 sm:pt-2 sm:pb-1.5">
-                  <p className="font-zh text-[11px] leading-relaxed text-foreground/45 sm:text-[12px] transition-colors duration-300 group-hover:text-[#9333EA]/75">
+                <div className="w-full pt-1.5 pb-1 sm:pt-2 sm:pb-1.5">
+                  <p className="font-zh text-[10px] leading-relaxed text-foreground/45 sm:text-[11px] transition-colors duration-300 group-hover:text-[#9333EA]/75">
                     {n.date}
                   </p>
                   <div className="mt-1 flex items-start gap-1">
@@ -83,12 +84,12 @@ export default function NewsStoriesGrid({ stories }: { stories: StoryItem[] }) {
                       >
                         {n.tag}
                       </span>
-                      <p className="font-zh text-[13px] font-bold leading-snug text-foreground sm:text-[14px] line-clamp-2 transition-colors duration-300 group-hover:text-[#7E22CE]">
+                      <p className="font-zh text-[12px] font-bold leading-snug text-foreground sm:text-[13px] line-clamp-2 transition-colors duration-300 group-hover:text-[#7E22CE]">
                         {n.title}
                       </p>
                     </div>
                     <ChevronRight
-                      className="mt-0.5 h-3.5 w-3.5 shrink-0 text-foreground/30 transition-colors duration-300 group-hover:text-[#8B5CF6] sm:h-4 sm:w-4"
+                      className="mt-0.5 h-3 w-3 shrink-0 text-foreground/30 transition-colors duration-300 group-hover:text-[#8B5CF6] sm:h-3.5 sm:w-3.5"
                       strokeWidth={2}
                       aria-hidden
                     />

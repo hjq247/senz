@@ -21,3 +21,28 @@ export function HeroVideoLightOverlays() {
     </>
   );
 }
+
+/** 子页 Hero / 视频条：浅浅提亮 + 柔和白雾，画面更明亮 */
+export function HeroVideoPageOverlays() {
+  return (
+    <>
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-white/[0.2]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.32) 32%, rgba(255,255,255,0.1) 52%, rgba(255,255,255,0) 68%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%]"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.14) 58%, rgba(255,255,255,0) 100%)",
+        }}
+      />
+    </>
+  );
+}

@@ -372,7 +372,7 @@ export const CAREERS = {
 };
 
 export const CONTACT = {
-  title: "总部地址",
+  title: "公司地址",
   bullets: [
     "各业务线联系邮箱（需补充）",
     "联系方式：如有座机电话",
@@ -393,7 +393,7 @@ export const ABOUT_SECTIONS = [
   { id: "history", label: "发展历程",     en: "History",              desc: "自 2018 年成立至今的关键里程碑与资本路径。" },
   { id: "honors",  label: "资质荣誉",     en: "Honors",               desc: "国家高新技术企业、国家级专精特新小巨人等行业认证。" },
   { id: "news",    label: "新闻中心",     en: "News Center",          desc: "深至故事、社会责任与媒体报道，按发布时间更新。" },
-  { id: "address", label: "总部地址",     en: "Headquarters" },
+  { id: "address", label: "公司地址",     en: "Company Address" },
 ] as const;
 
 export const HONORS = [

@@ -32,6 +32,12 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+
+  // 腾讯云 / Nginx 反代时识别 X-Forwarded-*（按需设置 TRUST_PROXY=1）
+  if (process.env.TRUST_PROXY === "1" || process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+  }
+
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -46,22 +52,31 @@ async function startServer() {
       createContext,
     })
   );
-  // development mode uses Vite, production mode uses static files
+  const apiOnly = process.env.API_ONLY === "1";
+
+  // development mode uses Vite; production 默认托管前端静态资源
+  // 前端在 Netlify 时可在服务器设 API_ONLY=1，只提供 /api/*
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
-  } else {
+  } else if (!apiOnly) {
     serveStatic(app);
   }
 
-  const preferredPort = parseInt(process.env.PORT || "3000");
-  const port = await findAvailablePort(preferredPort);
+  const preferredPort = parseInt(process.env.PORT || "3000", 10);
+  const isProd = process.env.NODE_ENV === "production";
+  const port = isProd ? preferredPort : await findAvailablePort(preferredPort);
 
-  if (port !== preferredPort) {
+  if (!isProd && port !== preferredPort) {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+  const host = process.env.HOST || "0.0.0.0";
+
+  server.listen(port, host, () => {
+    console.log(
+      `Server running on http://${host}:${port}/` +
+        (apiOnly && isProd ? " (API only)" : ""),
+    );
   });
 }
 
