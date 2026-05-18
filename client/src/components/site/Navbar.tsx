@@ -30,6 +30,35 @@ export default function Navbar() {
     setHover(null);
   }, [loc]);
 
+  /* 手机菜单打开时锁定背后页面滚动，菜单区自身可滚 */
+  useEffect(() => {
+    if (!open) return;
+    const isMobileNav = () => window.matchMedia("(max-width: 1023px)").matches;
+    if (!isMobileNav()) return;
+
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+
+    return () => {
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+
   const isActive = (href: string) => {
     if (href === "/") return loc === "/";
     return loc === href || loc.startsWith(href + "/");
@@ -124,13 +153,17 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* mobile */}
+      {/* mobile：独立滚动，不带动背后页面 */}
       <div
         className={`lg:hidden overflow-hidden transition-[max-height,opacity] duration-400 ${
-          open ? "max-h-[640px] opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[calc(100dvh-4rem)] opacity-100" : "max-h-0 opacity-0"
         } bg-white/95 backdrop-blur-xl border-b border-border`}
       >
-        <ul className="container py-4 grid gap-1">
+        <div
+          className="container max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-y-contain py-4 [-webkit-overflow-scrolling:touch]"
+          aria-hidden={!open}
+        >
+          <ul className="grid gap-1">
           {NAV.map((item) => (
             <li key={item.href}>
               <Link
@@ -160,7 +193,8 @@ export default function Navbar() {
               )}
             </li>
           ))}
-        </ul>
+          </ul>
+        </div>
       </div>
     </header>
   );

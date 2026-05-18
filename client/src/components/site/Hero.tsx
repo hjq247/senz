@@ -7,36 +7,27 @@
  *  · 蒙层：仅在左侧 + 顶部 + 底部薄薄的白雾，不再压视频中央人物
  *  · 整页 100% 缩放下，视频中央仍清晰可见，无文字遮挡
  */
-import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { HERO } from "@/lib/copy";
 import { HERO_SPLIT } from "@/lib/videos";
+import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { HeroVideoLightOverlays } from "@/lib/hero-video-overlays";
-import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  useAutoplayVideo(videoRef);
-
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden bg-[#F4F1EA] text-foreground h-screen flex flex-col"
+      className="relative isolate overflow-hidden bg-[#F4F1EA] text-foreground min-h-[100dvh] h-screen flex flex-col"
     >
-      {/* 视频铺满整屏（playbackRate 0.7 慢播） */}
-      <video
-        ref={videoRef}
+      <HeroBackgroundVideo
         src={HERO_SPLIT.rightVideo}
         poster={HERO_SPLIT.rightPoster}
-        muted
-        loop
-        autoPlay
-        playsInline
-        preload="auto"
-        className="absolute inset-x-0 bottom-0 top-[88px] h-[calc(100%-88px)] w-full object-cover"
-        style={{ objectPosition: "50% 65%" }}
+        objectPositionDesktop="50% 65%"
+        mobileInsetTopClassName="top-16"
+        desktopClassName="absolute inset-x-0 bottom-0 top-[88px] h-[calc(100%-88px)] w-full"
+        desktopSlowMo
       />
 
       <HeroVideoLightOverlays />

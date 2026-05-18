@@ -15,6 +15,7 @@ import PlatformProjectSection from "@/components/site/PlatformProjectSection";
 import PatentSwiperSection from "@/components/site/PatentSwiperSection";
 import { TERMINAL, NEURO, PLATFORM_SECTIONS } from "@/lib/copy";
 import { HERO_VIDEOS, HERO_POSTERS, VIDEOS } from "@/lib/videos";
+import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 
 const fadeUp = {
@@ -109,15 +110,12 @@ export default function PlatformPage() {
       {/* ============== 1.5 全宽视频条：Neuro AI 数据流 ============== */}
       <section id="neuro-video" className="relative bg-[#0B0F1E] py-0 overflow-hidden">
         <div className="relative h-[280px] sm:h-[360px] lg:h-[440px] w-full overflow-hidden">
-          <video
+          <HeroBackgroundVideo
             src={VIDEOS.neuroFlow}
             poster={HERO_POSTERS.platform}
-            muted
-            loop
-            autoPlay
-            playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover opacity-90 mix-blend-screen"
+            mobileInsetTopClassName="top-0"
+            letterboxClassName="bg-[#0B0F1E]"
+            videoClassName="opacity-90 mix-blend-screen"
           />
           <HeroVideoPageOverlays />
           <div className="relative z-10 h-full container flex flex-col justify-end pb-10 sm:pb-12 lg:pb-14">

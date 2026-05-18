@@ -3,13 +3,12 @@
  *  · 文案左下角；视频蒙层与首页 Hero 一致
  *  · 视频缺省时回落到 AuroraBackdrop
  */
-import { useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import AuroraBackdrop from "./AuroraBackdrop";
+import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { handleInPageHashNav } from "@/lib/inPageHashNav";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
-import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 type SubItem = {
   id: string;
@@ -44,32 +43,19 @@ export default function PageHero({
   subAnchorBase?: string;
 }) {
   const [loc] = useLocation();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = !!videoSrc;
-  useAutoplayVideo(videoRef);
   void tone;
 
   return (
     <section
       className={
-        "relative isolate overflow-hidden min-h-screen flex flex-col " +
+        "relative isolate overflow-hidden min-h-[100dvh] min-h-screen flex flex-col " +
         (isVideo ? "bg-[#F4F1EA] text-foreground" : "bg-white pt-28 lg:pt-36 pb-16 lg:pb-24")
       }
     >
       {isVideo ? (
         <>
-          <video
-            ref={videoRef}
-            src={videoSrc}
-            poster={posterSrc}
-            muted
-            loop
-            autoPlay
-            playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: "50% 55%" }}
-          />
+          <HeroBackgroundVideo src={videoSrc} poster={posterSrc} />
           <HeroVideoPageOverlays />
           <div
             aria-hidden

@@ -121,6 +121,24 @@ export default function PlatformProjectSection() {
 
     const interactRoot = senzInteractRef.current;
     const bgCanvas = senzBgCanvasRef.current;
+    let bgResizeObserver: ResizeObserver | undefined;
+
+    const syncBgSplineSize = () => {
+      if (!bgCanvas) return;
+      const wrap = bgCanvas.parentElement;
+      if (!wrap) return;
+      const { width, height } = wrap.getBoundingClientRect();
+      if (width < 1 || height < 1) return;
+      /* 手机：正方形容器 + 等比 setSize，避免霓虹被拉成椭圆 */
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
+      const renderSize = isMobile ? Math.min(width, height) : undefined;
+      const w = renderSize ?? width;
+      const h = renderSize ?? height;
+      const appWithSize = splineApp as unknown as {
+        setSize?: (w: number, h: number) => void;
+      };
+      appWithSize.setSize?.(w, h);
+    };
 
     if (interactRoot && bgCanvas) {
       splineApp = new Application(bgCanvas);
@@ -142,8 +160,16 @@ export default function PlatformProjectSection() {
         .then(() => {
           onRootClick = () => emitEllipse();
           interactRoot.addEventListener("click", onRootClick);
+          emitEllipse();
+          syncBgSplineSize();
+          if (bgCanvas.parentElement) {
+            bgResizeObserver = new ResizeObserver(syncBgSplineSize);
+            bgResizeObserver.observe(bgCanvas.parentElement);
+          }
         })
         .catch(console.error);
+
+      window.addEventListener("resize", syncBgSplineSize);
     }
 
     return () => {
@@ -151,6 +177,8 @@ export default function PlatformProjectSection() {
       introTween?.scrollTrigger?.kill();
       introTween?.kill();
       splineST?.kill();
+      window.removeEventListener("resize", syncBgSplineSize);
+      bgResizeObserver?.disconnect();
       if (interactRoot && onRootClick) {
         interactRoot.removeEventListener("click", onRootClick);
       }
@@ -319,7 +347,9 @@ export default function PlatformProjectSection() {
 
         {/* ── SENZ：对齐桌面 Group-2「Spline + 字」—— 仅用 bg.splinecode，不配 project-2 / project-2-bg（会与场景叠冗） */}
         <style>{`
-          /* 整块（字+Spline）上移：外层 style.marginTop + 此处 translateY */
+          .senz-g2-block {
+            margin-top: -120px;
+          }
           .senz-g2-inner {
             position: relative;
             display: flex;
@@ -328,22 +358,31 @@ export default function PlatformProjectSection() {
             min-height: min(72vw, 540px);
             transform: translateY(-56px);
           }
-          /* 仅 bg.splinecode 画布：用 top / translate 第二项相对内框上移（不改 SENZ 字） */
+          /* 字 + 霓虹共用锚点，水平垂直居中叠放 */
+          .senz-g2-stage {
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: min(960px, 100%);
+            height: clamp(300px, 62vw, 560px);
+          }
           .senz-g2-spline-wrap {
             position: absolute;
-            left: 50%;
-            top: 28%;
-            transform: translate(-50%, -58%);
-            width: min(118vw, 960px);
-            height: clamp(300px, 62vw, 560px);
+            inset: -10% -6%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 10;
             pointer-events: none;
+            overflow: visible;
           }
           #senzBgPreview {
             display: block;
             width: 100%;
             height: 100%;
+            max-width: min(118vw, 960px);
             pointer-events: none;
+            mix-blend-mode: screen;
           }
           .senz-g2-title {
             position: relative;
@@ -359,6 +398,52 @@ export default function PlatformProjectSection() {
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+          }
+          @media (max-width: 767px) {
+            #platform-project-section {
+              overflow-x: clip;
+            }
+            .senz-g2-block {
+              margin-top: -56px;
+              padding-left: 0;
+              padding-right: 0;
+              max-width: 100%;
+              overflow: visible;
+            }
+            .senz-g2-inner {
+              min-height: clamp(260px, 72vw, 380px);
+              transform: translateY(-20px);
+              width: 100%;
+            }
+            .senz-g2-stage {
+              width: 100%;
+              max-width: 100%;
+              height: clamp(260px, 78vw, 400px);
+              margin-left: auto;
+              margin-right: auto;
+            }
+            /* 霓虹：正方形、等比缩小，居中叠在 SENZ 字上 */
+            .senz-g2-spline-wrap {
+              inset: auto;
+              left: 50%;
+              top: 50%;
+              right: auto;
+              bottom: auto;
+              width: min(68vw, 280px);
+              aspect-ratio: 1;
+              height: auto;
+              transform: translate(-50%, -50%);
+            }
+            #senzBgPreview {
+              width: 100%;
+              height: 100%;
+              max-width: none;
+              aspect-ratio: 1;
+            }
+            .senz-g2-title {
+              font-size: clamp(52px, 16.5vw, 88px);
+              letter-spacing: 0.08em;
+            }
           }
           /* 对齐 desktop .m-project .group-3 .intro-desc：渐变透明字 + background-size 供 scrub 扫亮 */
           .platform-intro-desc {
@@ -388,11 +473,10 @@ export default function PlatformProjectSection() {
 
         <div
           ref={senzInteractRef}
-          className="relative z-10 text-center px-6 senz-group-2 cursor-default"
+          className="senz-g2-block relative z-10 text-center px-6 max-md:px-0 senz-group-2 cursor-default"
           style={{
             paddingTop: 0,
             paddingBottom: 16,
-            marginTop: -148, /* 整块再上移：改这里（与 .senz-g2-inner 的 translateY 叠加） */
             maxWidth: "min(100%, 980px)",
             marginLeft: "auto",
             marginRight: "auto",
@@ -400,10 +484,12 @@ export default function PlatformProjectSection() {
           }}
         >
           <div className="senz-g2-inner mx-auto">
-            <div className="senz-g2-spline-wrap" aria-hidden>
-              <canvas id="senzBgPreview" ref={senzBgCanvasRef} />
+            <div className="senz-g2-stage">
+              <div className="senz-g2-spline-wrap" aria-hidden>
+                <canvas id="senzBgPreview" ref={senzBgCanvasRef} />
+              </div>
+              <span className="senz-g2-title">SENZ</span>
             </div>
-            <span className="senz-g2-title">SENZ</span>
           </div>
         </div>
 

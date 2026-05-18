@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Sparkle } from "lucide-react";
 import { Link, useLocation } from "wouter";
@@ -6,8 +6,8 @@ import Navbar from "@/components/site/Navbar";
 import { SOLUTION_DETAILS, type Audience } from "@/lib/solutions";
 import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
 import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
+import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
-import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 // 三个 Solution 子页 hero 资源 + tone（黑/白交错）
 const SOLUTION_HERO_VIDEO: Record<Audience, string> = {
@@ -29,8 +29,6 @@ const SOLUTION_HERO_TONE: Record<Audience, "dark" | "light"> = {
 
 export default function SolutionDetail({ audience }: { audience: Audience }) {
   const d = SOLUTION_DETAILS[audience];
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
-  useAutoplayVideo(heroVideoRef);
   const pillarCountZh =
     d.pillars.length === 3 ? "三" : d.pillars.length === 4 ? "四" : d.pillars.length === 5 ? "五" : String(d.pillars.length);
   const [loc] = useLocation();
@@ -49,18 +47,10 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
         void tone;
         const isDark = false;
         return (
-      <section className="relative isolate overflow-hidden min-h-screen flex flex-col bg-[#F4F1EA] text-foreground">
-        <video
-          ref={heroVideoRef}
+      <section className="relative isolate overflow-hidden min-h-[100dvh] min-h-screen flex flex-col bg-[#F4F1EA] text-foreground">
+        <HeroBackgroundVideo
           src={SOLUTION_HERO_VIDEO[audience]}
           poster={SOLUTION_HERO_POSTER[audience]}
-          muted
-          loop
-          autoPlay
-          playsInline
-          preload="auto"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: "50% 55%" }}
         />
         <HeroVideoPageOverlays />
         <div

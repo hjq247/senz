@@ -8,6 +8,9 @@
  */
 import { useEffect, useRef } from "react";
 import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
+import { useResponsiveVideo } from "@/hooks/useResponsiveVideo";
+import { useVideoAspectRatio } from "@/hooks/useVideoAspectRatio";
+import { cn } from "@/lib/utils";
 
 interface VideoCardProps {
   src: string;
@@ -40,6 +43,9 @@ export default function VideoCard({
 }: VideoCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   useAutoplayVideo(videoRef);
+  const { objectFit, preload } = useResponsiveVideo();
+  const aspectRatio = useVideoAspectRatio(videoRef, src);
+  const effectiveFit = fit === "contain" ? "contain" : objectFit;
 
   useEffect(() => {
     const v = videoRef.current;
@@ -62,7 +68,13 @@ export default function VideoCard({
 
   return (
     <div
-      className={`relative overflow-hidden bg-[#F5F2FF] ${radius} ${border} ${className}`}
+      className={cn(
+        "relative overflow-hidden bg-[#F5F2FF]",
+        effectiveFit === "contain" && "flex items-start justify-center",
+        radius,
+        border,
+        className
+      )}
       style={{ aspectRatio: aspect }}
       aria-label={label}
     >
@@ -74,9 +86,19 @@ export default function VideoCard({
         loop
         autoPlay
         playsInline
-        preload="metadata"
-        className={`h-full w-full ${fit === "cover" ? "object-cover" : "object-contain"}`}
-        style={softWash ? { filter: "saturate(0.78) brightness(1.04) contrast(0.96)" } : undefined}
+        preload={preload}
+        className={cn(
+          effectiveFit === "contain"
+            ? "max-h-full max-w-full object-contain object-top"
+            : "h-full w-full object-cover"
+        )}
+        style={{
+          aspectRatio:
+            effectiveFit === "contain" && aspectRatio ? aspectRatio : undefined,
+          ...(softWash
+            ? { filter: "saturate(0.78) brightness(1.04) contrast(0.96)" }
+            : {}),
+        }}
       />
       {/* 柔和蒙层：白色微透明渐变，降低色彩对比强度 */}
       {softWash && (
