@@ -3,11 +3,11 @@
  * 一级：首页 / 平台技术 / 解决方案 / 关于深至 / 加入我们（深至故事等锚点在「关于深至」页）
  * 玻璃白 + 极光下划线 hover；下拉浮卡显示二级
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { SENZ_LOGO } from "@/lib/assets";
-import { handleInPageHashNav } from "@/lib/inPageHashNav";
+import { handleHashNavClick, handlePathNavClick, MOBILE_NAV_CLOSE_EVENT } from "@/lib/inPageHashNav";
 import { SITE_NAV } from "@/lib/site-nav";
 
 const NAV = SITE_NAV;
@@ -16,7 +16,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState<string | null>(null);
-  const [loc] = useLocation();
+  const [loc, setLocation] = useLocation();
+  const skipScrollRestoreRef = useRef(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -29,6 +30,16 @@ export default function Navbar() {
     setOpen(false);
     setHover(null);
   }, [loc]);
+
+  useEffect(() => {
+    const onClose = (e: Event) => {
+      const detail = (e as CustomEvent<{ scrollToId?: string }>).detail;
+      if (detail?.scrollToId) skipScrollRestoreRef.current = true;
+      setOpen(false);
+    };
+    window.addEventListener(MOBILE_NAV_CLOSE_EVENT, onClose);
+    return () => window.removeEventListener(MOBILE_NAV_CLOSE_EVENT, onClose);
+  }, []);
 
   /* 手机菜单打开时锁定背后页面滚动，菜单区自身可滚 */
   useEffect(() => {
@@ -55,7 +66,10 @@ export default function Navbar() {
       body.style.top = prev.top;
       body.style.width = prev.width;
       body.style.overflow = prev.overflow;
-      window.scrollTo(0, scrollY);
+      if (!skipScrollRestoreRef.current) {
+        window.scrollTo(0, scrollY);
+      }
+      skipScrollRestoreRef.current = false;
     };
   }, [open]);
 
@@ -74,7 +88,11 @@ export default function Navbar() {
       onMouseLeave={() => setHover(null)}
     >
       <nav className="container flex h-16 lg:h-[72px] items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
+        <Link
+          href="/"
+          onClick={(e) => handlePathNavClick(e, "/", loc, setLocation)}
+          className="flex items-center gap-2 group shrink-0"
+        >
           <img
             src={SENZ_LOGO}
             alt="深至科技 Senz"
@@ -91,6 +109,7 @@ export default function Navbar() {
             >
               <Link
                 href={item.href}
+                onClick={(e) => handlePathNavClick(e, item.href, loc, setLocation)}
                 className={`relative inline-flex items-center gap-1 px-3 py-2 rounded-full transition-colors ${
                   isActive(item.href)
                     ? "text-[#1E6BFF]"
@@ -120,7 +139,7 @@ export default function Navbar() {
                         <li key={s.href}>
                           <Link
                             href={s.href}
-                            onClick={(e) => handleInPageHashNav(e, s.href, loc)}
+                            onClick={(e) => handleHashNavClick(e, s.href, loc, setLocation)}
                             className="block px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#1E6BFF]/5 hover:to-[#FF77C3]/5 transition-colors"
                           >
                             <div className="text-[13.5px] font-bold text-foreground font-zh">
@@ -168,6 +187,7 @@ export default function Navbar() {
             <li key={item.href}>
               <Link
                 href={item.href}
+                onClick={(e) => handlePathNavClick(e, item.href, loc, setLocation)}
                 className={`block px-3 py-3 rounded-lg text-[15px] font-medium ${
                   isActive(item.href)
                     ? "bg-gradient-to-r from-[#1E6BFF]/10 to-[#FF77C3]/10 text-[#1E6BFF]"
@@ -182,7 +202,7 @@ export default function Navbar() {
                     <li key={s.href}>
                       <Link
                         href={s.href}
-                        onClick={(e) => handleInPageHashNav(e, s.href, loc)}
+                        onClick={(e) => handleHashNavClick(e, s.href, loc, setLocation)}
                         className="block px-3 py-2 rounded-md text-[13px] text-foreground/70 hover:text-[#1E6BFF]"
                       >
                         — {s.label}

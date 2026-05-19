@@ -1,6 +1,6 @@
 import type { Express, Request, Response } from "express";
 import { articleCategories, type ArticleCategory } from "../../drizzle/schema";
-import { getArticleById, listArticles } from "../db/articles";
+import { getArticleFromJson, listArticlesFromJson, readArticlesJson } from "../articlesJson";
 import { syncWechatArticles } from "../wechat/sync";
 
 function parsePositiveInt(value: unknown, fallback: number): number {
@@ -96,7 +96,7 @@ export function registerArticlesApi(app: Express): void {
         return;
       }
 
-      const result = await listArticles({
+      const result = await listArticlesFromJson({
         page: parsePositiveInt(req.query.page, 1),
         pageSize: parsePositiveInt(req.query.pageSize, 20),
         category,
@@ -115,12 +115,23 @@ export function registerArticlesApi(app: Express): void {
     }
 
     try {
-      const article = await getArticleById(id);
+      const article = await getArticleFromJson(id);
       if (!article) {
         res.status(404).json({ error: "Article not found" });
         return;
       }
       res.json(article);
+    } catch (err) {
+      sendDbError(res, err);
+    }
+  });
+
+  app.get("/articles.json", async (req, res) => {
+    try {
+      applyCors(req, res);
+      const data = await readArticlesJson();
+      res.setHeader("Cache-Control", "no-store");
+      res.json(data);
     } catch (err) {
       sendDbError(res, err);
     }

@@ -11,10 +11,13 @@ type HeroBackgroundVideoProps = {
   desktopClassName?: string;
   /** 手机 contain 时顶部偏移（避让固定导航），默认 top-16 */
   mobileInsetTopClassName?: string;
+  /** 手机 contain 容器自定义定位与尺寸 */
+  mobileClassName?: string;
   desktopStyle?: CSSProperties;
   objectPositionDesktop?: string;
   letterboxClassName?: string;
   videoClassName?: string;
+  mobileObjectFit?: "contain" | "cover";
   desktopSlowMo?: boolean;
 };
 
@@ -30,14 +33,19 @@ export default function HeroBackgroundVideo({
   desktopStyle,
   objectPositionDesktop = "50% 55%",
   mobileInsetTopClassName = "top-16",
+  mobileClassName,
   letterboxClassName = "bg-[#F4F1EA]",
   videoClassName,
+  mobileObjectFit = "contain",
   desktopSlowMo = false,
 }: HeroBackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   useAutoplayVideo(videoRef, { desktopSlowMo });
   const { preload, objectFit, objectPosition } = useResponsiveVideo({
     objectPositionDesktop,
+    // Hero 是首屏主视觉：桌面允许更积极的预取；移动端仍保持轻量。
+    preloadDesktop: "auto",
+    preloadMobile: "metadata",
   });
   const aspectRatio = useVideoAspectRatio(videoRef, src);
 
@@ -47,11 +55,13 @@ export default function HeroBackgroundVideo({
     <div
       className={cn(
         isContain
-          ? cn(
-              "absolute inset-x-0 bottom-0 flex items-start justify-center",
-              mobileInsetTopClassName,
-              letterboxClassName
-            )
+          ? mobileClassName
+            ? cn(mobileClassName, letterboxClassName)
+            : cn(
+                "absolute inset-x-0 bottom-0 flex items-start justify-center",
+                mobileInsetTopClassName,
+                letterboxClassName
+              )
           : cn(desktopClassName, letterboxClassName)
       )}
       style={isContain ? undefined : desktopStyle}
@@ -64,18 +74,22 @@ export default function HeroBackgroundVideo({
         loop
         autoPlay
         playsInline
+        disablePictureInPicture
         preload={preload}
         className={cn(
-          isContain
-            ? "max-h-full max-w-full object-contain object-top"
+          isContain && mobileObjectFit === "cover"
+            ? "h-full w-full object-cover object-top"
+            : isContain
+              ? "h-auto w-full max-h-full object-contain object-top"
             : "h-full w-full object-cover",
           videoClassName
         )}
         style={{
-          aspectRatio: isContain && aspectRatio ? aspectRatio : undefined,
+          aspectRatio:
+            isContain && mobileObjectFit === "contain" && aspectRatio
+              ? aspectRatio
+              : undefined,
           objectPosition,
-          width: isContain ? "auto" : undefined,
-          height: isContain ? "auto" : undefined,
         }}
       />
     </div>

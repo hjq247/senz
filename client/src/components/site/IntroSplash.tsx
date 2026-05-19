@@ -24,6 +24,7 @@ export default function IntroSplash() {
     const t = window.setTimeout(() => {
       sessionStorage.setItem(KEY, "1");
       setShow(false);
+      window.dispatchEvent(new CustomEvent("senz:intro-ended"));
     }, 2600);
     return () => {
       window.clearTimeout(t);

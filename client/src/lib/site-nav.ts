@@ -8,7 +8,7 @@ export const SITE_NAV: NavItem[] = [
     label: "平台技术",
     href: "/platform",
     sub: [
-      { label: "原生 AI 终端体系", href: "/platform#terminal" },
+      { label: "原生 AI 终端体系", href: "/platform#platform-project-section" },
       { label: "健康管理协同系统", href: "/platform#neuro" },
       { label: "知识产权", href: "/platform#ip" },
     ],

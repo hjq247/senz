@@ -101,7 +101,14 @@ const PATENT_FILES = [
   "专利证书-深专0353-发明-2024118023463-一种基于;AI;辅助的扫查甲状腺系统及方法.pdf",
 ];
 
-type Patent = { filename: string; id: string; type: string; title: string; link: string };
+type Patent = {
+  filename: string;
+  id: string;
+  type: string;
+  title: string;
+  link: string;
+  preview: string;
+};
 
 function parsePatent(filename: string): Patent {
   const base = filename.replace(".pdf", "");
@@ -110,7 +117,8 @@ function parsePatent(filename: string): Patent {
   const type = parts[2] ?? "";
   const title = parts.slice(4).join("-") || parts[parts.length - 1];
   const link = `/assets/patents/${encodeURIComponent(filename)}`;
-  return { filename, id, type, title, link };
+  const preview = `/assets/patents/previews-jpg/${encodeURIComponent(base)}.jpg`;
+  return { filename, id, type, title, link, preview };
 }
 
 const PATENTS: Patent[] = PATENT_FILES.map(parsePatent);
@@ -205,10 +213,10 @@ export default function PatentSwiperSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mt-10 mb-12 flex items-baseline gap-4"
+          className="mt-8 mb-8 flex items-baseline justify-center gap-3 lg:mt-10 lg:mb-12 lg:justify-start lg:gap-4"
         >
           <h3
-            className="font-zh text-[52px] lg:text-[72px] font-black leading-none tracking-tight"
+            className="font-zh text-[44px] lg:text-[72px] font-black leading-none tracking-tight"
             style={gradientTextStyle}
           >
             专利
@@ -224,11 +232,10 @@ export default function PatentSwiperSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid items-center gap-8 lg:gap-10"
-          style={{ gridTemplateColumns: "1fr 320px 1fr" }}
+          className="grid grid-cols-1 items-center gap-6 lg:grid-cols-[1fr_320px_1fr] lg:gap-10"
         >
-          {/* ── 左栏：infoSwiper（parallax 文案） ── */}
-          <div className="min-w-0">
+          {/* ── 左栏：infoSwiper（桌面端标题与原文入口） ── */}
+          <motion.div className="hidden min-w-0 lg:order-none lg:block">
             <Swiper
               modules={[Parallax]}
               parallax
@@ -269,7 +276,7 @@ export default function PatentSwiperSection() {
 
                     {/* 专利名称 */}
                     <h4
-                      className="font-zh text-[20px] lg:text-[26px] font-bold leading-[1.45] text-white mb-6"
+                      className="font-zh text-[26px] font-bold leading-[1.45] text-white mb-6"
                       data-swiper-parallax-x="-100"
                       data-swiper-parallax-opacity="0"
                     >
@@ -292,23 +299,12 @@ export default function PatentSwiperSection() {
                 </SwiperSlide>
               ))}
             </Swiper>
-
-            {/* 移动端导航 */}
-            <div className="lg:hidden mt-8 flex items-center gap-4">
-              <button className="patent-swiper-prev group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15">
-                <ChevronLeft className="h-4 w-4 text-white/90" />
-              </button>
-              <div className="patent-swiper-pagination font-display text-[12px]" />
-              <button className="patent-swiper-next group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15">
-                <ChevronRight className="h-4 w-4 text-white/90" />
-              </button>
-            </div>
-          </div>
+          </motion.div>
 
           {/* ── 中栏：thumbSwiper（GSAP 叠放，overflow:visible 必须）── */}
-          <div
-            className="relative flex items-center justify-center"
-            style={{ width: "440px", height: "580px", overflow: "visible" }}
+          <motion.div
+            className="order-1 relative mx-auto flex w-full max-w-[280px] items-center justify-center sm:max-w-[320px] lg:order-none lg:h-[580px] lg:w-[440px] lg:max-w-none"
+            style={{ overflow: "visible" }}
           >
             <Swiper
               modules={[Thumbs, Navigation, Pagination]}
@@ -332,7 +328,8 @@ export default function PatentSwiperSection() {
               onSwiper={(s) => { thumbSwiperRef.current = s; }}
               onInit={initThumbLayout}
               onResize={resizeThumbLayout}
-              style={{ overflow: "visible", width: "320px" }}
+              className="!w-full max-w-[280px] sm:max-w-[320px]"
+              style={{ overflow: "visible" }}
             >
               {PATENTS.map((patent, i) => (
                 <SwiperSlide key={patent.filename}>
@@ -340,7 +337,8 @@ export default function PatentSwiperSection() {
                   <div
                     className="rounded-xl overflow-hidden bg-white"
                     style={{
-                      width: "320px",
+                      width: "100%",
+                      maxWidth: "320px",
                       aspectRatio: "210 / 297",
                       pointerEvents: i === activeIndex ? "auto" : "none",
                       boxShadow: i === activeIndex
@@ -349,11 +347,12 @@ export default function PatentSwiperSection() {
                     }}
                   >
                     {Math.abs(i - activeIndex) <= 2 ? (
-                      <iframe
-                        src={patent.link}
-                        className="w-full h-full border-0"
-                        loading="lazy"
-                        title={patent.title}
+                      <img
+                        src={patent.preview}
+                        alt={`${patent.title}专利证书`}
+                        className="h-full w-full object-contain"
+                        loading={i === activeIndex ? "eager" : "lazy"}
+                        draggable={false}
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-[#F5F6FF]">
@@ -367,12 +366,12 @@ export default function PatentSwiperSection() {
                 </SwiperSlide>
               ))}
             </Swiper>
-          </div>
+          </motion.div>
 
-          {/* ── 右栏：导航 + 计数（居中对齐） ── */}
-          <div className="hidden lg:flex flex-col items-center justify-center gap-5">
+          {/* ── 导航 + 计数（移动端置于证书下方，桌面端置于右栏） ── */}
+          <div className="order-2 flex items-center justify-center gap-4 lg:order-none lg:flex-col lg:gap-5">
             <button
-              className="patent-swiper-prev group flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/15 transition hover:bg-white/25 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="patent-swiper-prev group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15 transition hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-30 lg:h-11 lg:w-11"
               aria-label="上一项"
             >
               <ChevronLeft className="h-4 w-4 text-white/90 transition-colors" />
@@ -384,7 +383,7 @@ export default function PatentSwiperSection() {
             />
 
             <button
-              className="patent-swiper-next group flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/15 transition hover:bg-white/25 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="patent-swiper-next group flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15 transition hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-30 lg:h-11 lg:w-11"
               aria-label="下一项"
             >
               <ChevronRight className="h-4 w-4 text-white/90 transition-colors" />

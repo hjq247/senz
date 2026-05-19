@@ -2,7 +2,7 @@
  * 关于深至
  *  · 公司介绍 / 公司文化 / 发展历程 / 资质荣誉 / 新闻中心 / 公司地址
  */
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Building2, Navigation } from "lucide-react";
 import PageShell from "@/components/layout/PageShell";
@@ -20,7 +20,7 @@ import {
 } from "@/lib/copy";
 import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
 import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
-import { buildNewsFeed } from "@/lib/news-data";
+import { fallbackNewsFeed, fetchNewsFeed } from "@/lib/articles-json";
 import HonorsSection from "@/components/site/HonorsSection";
 
 const fadeUp = {
@@ -35,7 +35,21 @@ const fadeUp = {
 const VALUE_COLORS = ["#1E6BFF", "#8A6BFF", "#FF77C3", "#2AC58E", "#1E6BFF"];
 
 export default function AboutPage() {
-  const newsFeed = useMemo(() => buildNewsFeed(), []);
+  const [newsFeed, setNewsFeed] = useState(() => fallbackNewsFeed());
+
+  useEffect(() => {
+    let ignore = false;
+    fetchNewsFeed()
+      .then(items => {
+        if (!ignore) setNewsFeed(items);
+      })
+      .catch(() => {
+        if (!ignore) setNewsFeed(fallbackNewsFeed());
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <PageShell>

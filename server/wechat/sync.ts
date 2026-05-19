@@ -1,5 +1,5 @@
 import type { ArticleCategory } from "../../drizzle/schema";
-import { upsertArticlesFromWechat } from "../db/articles";
+import { upsertArticlesJson } from "../articlesJson";
 import { fetchAllPublishedItems } from "./client";
 import { mapPublishedItemToRecords, toInsertArticles } from "./mapArticles";
 
@@ -22,9 +22,7 @@ export async function syncWechatArticles(
   const category = options.category ?? "stories";
   const items = await fetchAllPublishedItems();
   const records = items.flatMap(mapPublishedItemToRecords);
-  const { created, updated } = await upsertArticlesFromWechat(
-    toInsertArticles(records, category),
-  );
+  const { created, updated } = await upsertArticlesJson(toInsertArticles(records, category));
 
   return {
     fetched: items.length,

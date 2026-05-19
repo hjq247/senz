@@ -6,7 +6,7 @@
  *  · 设计哲学：参考 Tempus，视频不是装饰，而是内容本身。
  *  · 动效：仅靠视频自身循环 + 容器淡入上移，不堆砌额外动画。
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 import { useResponsiveVideo } from "@/hooks/useResponsiveVideo";
 import { useVideoAspectRatio } from "@/hooks/useVideoAspectRatio";
@@ -42,8 +42,9 @@ export default function VideoCard({
   softWash = false,
 }: VideoCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [activated, setActivated] = useState(false);
   useAutoplayVideo(videoRef);
-  const { objectFit, preload } = useResponsiveVideo();
+  const { objectFit } = useResponsiveVideo();
   const aspectRatio = useVideoAspectRatio(videoRef, src);
   const effectiveFit = fit === "contain" ? "contain" : objectFit;
 
@@ -54,6 +55,14 @@ export default function VideoCard({
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
+            if (!activated) {
+              // 非首屏视频：先不预加载，进入视口再开始取元数据/拉流，避免一上来多路抢资源。
+              setActivated(true);
+              try {
+                v.preload = "metadata";
+                v.load();
+              } catch {}
+            }
             v.play().catch(() => {});
           } else {
             v.pause();
@@ -64,7 +73,7 @@ export default function VideoCard({
     );
     io.observe(v);
     return () => io.disconnect();
-  }, []);
+  }, [activated]);
 
   return (
     <div
@@ -84,9 +93,8 @@ export default function VideoCard({
         poster={poster}
         muted
         loop
-        autoPlay
         playsInline
-        preload={preload}
+        preload={activated ? "metadata" : "none"}
         className={cn(
           effectiveFit === "contain"
             ? "max-h-full max-w-full object-contain object-top"

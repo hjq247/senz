@@ -4,9 +4,11 @@
  * 缩略图与关于页列表（PreviewStoryMedia · row）同尺寸与逻辑：优先使用 news-data 内固化的 cover。
  */
 import { ArrowUpRight, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { PreviewStoryMedia } from "@/components/site/PreviewStoryMedia";
-import { buildNewsFeed, type NewsCategory } from "@/lib/news-data";
+import { fallbackNewsFeed, fetchNewsFeed } from "@/lib/articles-json";
+import type { NewsCategory } from "@/lib/news-data";
 
 type Item = {
   title: string;
@@ -16,13 +18,27 @@ type Item = {
   cover?: string;
 };
 
-const LATEST: Item[] = buildNewsFeed().slice(0, 3).map((n) => ({
-  title: n.title,
-  tag: n.tag,
-  date: n.date,
-  anchor: n.link,
-  cover: n.cover,
-}));
+function toItems() {
+  return fallbackNewsFeed().slice(0, 3).map((n) => ({
+    title: n.title,
+    tag: n.tag,
+    date: n.date,
+    anchor: n.link,
+    cover: n.cover,
+  }));
+}
+
+const FALLBACK_LATEST: Item[] = toItems();
+
+function mapLatest(items: ReturnType<typeof fallbackNewsFeed>): Item[] {
+  return items.slice(0, 3).map((n) => ({
+    title: n.title,
+    tag: n.tag,
+    date: n.date,
+    anchor: n.link,
+    cover: n.cover,
+  }));
+}
 
 function Card({
   item,
@@ -83,6 +99,22 @@ function Card({
 }
 
 export default function HomeNewsTeaser() {
+  const [latest, setLatest] = useState<Item[]>(FALLBACK_LATEST);
+
+  useEffect(() => {
+    let ignore = false;
+    fetchNewsFeed()
+      .then(items => {
+        if (!ignore) setLatest(mapLatest(items));
+      })
+      .catch(() => {
+        if (!ignore) setLatest(FALLBACK_LATEST);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <section
       id="news-teaser"
@@ -110,7 +142,7 @@ export default function HomeNewsTeaser() {
 
       <div className="mt-10 container">
         <div className="grid gap-5 grid-cols-1">
-          {LATEST.map((item) => (
+          {latest.map((item) => (
             <Card
               key={`${item.tag}-${item.anchor}`}
               item={item}

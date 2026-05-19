@@ -48,7 +48,7 @@ export const HERO_POSTERS = {
   patient: "/manus-storage/hero_patient_live_a334c03e.webp",
   doctor: "/manus-storage/hero_doctor_live_97013ef3.webp",
   industry: "/manus-storage/hero_industry_live_817e244e.webp",
-  about: "/manus-storage/hero_about_live_7751f73f.webp",
+  about: "/manus-storage/hero_about_live_7751f73d.webp",
   news: "/manus-storage/senz_hero_news_v2_9d780267.webp",
   careers: "/manus-storage/hero_careers_live_3568f430.webp",
 } as const;

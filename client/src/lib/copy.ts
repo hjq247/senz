@@ -434,7 +434,7 @@ export const CONTACT_DETAILS = {
 };
 
 export const PLATFORM_SECTIONS = [
-  { id: "terminal", label: "原生 AI 终端体系",   en: "AI-Native Terminals" },
+  { id: "platform-project-section", label: "原生 AI 终端体系",   en: "AI-Native Terminals" },
   { id: "neuro",    label: "健康管理协同系统",   en: "Neuro AI Network" },
   { id: "ip",       label: "知识产权",           en: "Intellectual Property" },
 ] as const;

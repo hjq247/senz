@@ -5,9 +5,11 @@ import { ENV } from "./env";
 /** Matches Vite `publicDir` + URL prefix used in `client/src/lib/videos.ts` etc. */
 function localManusStorageDir(): string {
   const coreDir = import.meta.dirname;
-  return process.env.NODE_ENV === "production"
-    ? path.resolve(coreDir, "../../dist/public/manus-storage")
-    : path.resolve(coreDir, "../../client/public/manus-storage");
+  if (process.env.NODE_ENV === "production") {
+    // Production bundle is dist/index.js — static assets live in dist/public/ (see serveStatic in vite.ts).
+    return path.resolve(coreDir, "public/manus-storage");
+  }
+  return path.resolve(coreDir, "../../client/public/manus-storage");
 }
 
 export function registerStorageProxy(app: Express) {
@@ -22,7 +24,7 @@ export function registerStorageProxy(app: Express) {
     }
 
     if (!ENV.forgeApiUrl || !ENV.forgeApiKey) {
-      res.status(500).send("Storage proxy not configured");
+      res.status(404).send("Not found");
       return;
     }
 

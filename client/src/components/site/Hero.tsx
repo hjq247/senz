@@ -19,13 +19,14 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden bg-[#F4F1EA] text-foreground min-h-[100dvh] h-screen flex flex-col"
+      className="relative isolate overflow-hidden bg-[#F4F1EA] text-foreground min-h-[860px] flex flex-col lg:min-h-[100dvh] lg:h-screen"
     >
       <HeroBackgroundVideo
         src={HERO_SPLIT.rightVideo}
         poster={HERO_SPLIT.rightPoster}
         objectPositionDesktop="50% 65%"
-        mobileInsetTopClassName="top-16"
+        mobileClassName="absolute inset-x-0 top-16 flex h-[360px] items-start justify-center sm:h-[420px] lg:inset-x-0 lg:bottom-0 lg:top-[88px] lg:h-[calc(100%-88px)]"
+        mobileObjectFit="cover"
         desktopClassName="absolute inset-x-0 bottom-0 top-[88px] h-[calc(100%-88px)] w-full"
         desktopSlowMo
       />
@@ -51,7 +52,7 @@ export default function Hero() {
       />
 
       {/* ============== 顶部细字幕条 ============== */}
-      <div className="relative z-10 pt-20 lg:pt-24">
+      <div className="relative z-10 pt-[455px] lg:pt-24">
         <div className="container flex items-center justify-between text-[11px] tracking-[0.22em] uppercase font-display text-foreground/65">
           <motion.div
             initial={{ opacity: 0, y: -8 }}
@@ -68,7 +69,7 @@ export default function Hero() {
       </div>
 
       {/* ============== 文案：左下角，给视频最大可视面积 ============== */}
-      <div className="relative z-10 flex-1 flex items-end pb-16 lg:pb-20">
+      <div className="relative z-10 flex flex-none items-start pb-10 pt-6 lg:flex-1 lg:items-end lg:pb-20 lg:pt-0">
         <div className="container">
           <div className="grid grid-cols-12 gap-6">
             <div className="col-span-12 sm:col-span-9 md:col-span-7 lg:col-span-5 xl:col-span-5">

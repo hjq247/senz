@@ -12,6 +12,7 @@ import ProductsPage from "./pages/ProductsPage";
 import AboutPage from "./pages/AboutPage";
 import CareersPage from "./pages/CareersPage";
 import IntroSplash from "@/components/site/IntroSplash";
+import { applyHashAfterRoute } from "@/lib/inPageHashNav";
 
 /** 旧「新闻中心」独立页已并入关于深至，保留 /news 链接兼容 */
 function LegacyNewsRedirect() {
@@ -23,14 +24,9 @@ function LegacyNewsRedirect() {
 function ScrollMaster() {
   const [location] = useLocation();
   useEffect(() => {
-    const hash = window.location.hash;
-    if (!hash) return;
-    const raw = hash.replace("#", "");
-    const id = ["stories", "csr", "media"].includes(raw) ? "news" : raw;
+    if (!window.location.hash) return;
     requestAnimationFrame(() => {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      else window.scrollTo({ top: 0, behavior: "auto" });
+      applyHashAfterRoute(location, { behavior: "smooth" });
     });
   }, [location]);
   return null;

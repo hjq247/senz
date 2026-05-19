@@ -7,7 +7,7 @@
 import { ReactNode, useEffect, useLayoutEffect } from "react";
 import { Link, useLocation } from "wouter";
 import Navbar from "@/components/site/Navbar";
-import { handleInPageHashNav } from "@/lib/inPageHashNav";
+import { applyHashAfterRoute, handleHashNavClick, handlePathNavClick } from "@/lib/inPageHashNav";
 import { SITE_NAV, type NavItem } from "@/lib/site-nav";
 import { HERO_VIDEOS, HERO_POSTERS, type HeroKey } from "@/lib/videos";
 
@@ -63,32 +63,16 @@ function usePreloadHero(loc: string) {
 export default function PageShell({ children }: { children: ReactNode }) {
   const [loc] = useLocation();
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-    const id = window.location.hash.slice(1);
-    if (id) {
-      queueMicrotask(() => {
-        document.getElementById(id)?.scrollIntoView({
-          behavior: "instant" as ScrollBehavior,
-          block: "start",
-        });
-      });
-    }
+    applyHashAfterRoute(loc, { behavior: "instant" });
   }, [loc]);
 
   useEffect(() => {
     const onHashChange = () => {
-      const id = window.location.hash.slice(1);
-      if (!id) return;
-      queueMicrotask(() => {
-        document.getElementById(id)?.scrollIntoView({
-          behavior: "instant" as ScrollBehavior,
-          block: "start",
-        });
-      });
+      applyHashAfterRoute(loc, { behavior: "instant" });
     };
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
+  }, [loc]);
   usePreloadHero(loc);
 
   return (
@@ -101,7 +85,7 @@ export default function PageShell({ children }: { children: ReactNode }) {
 }
 
 function Footer() {
-  const [loc] = useLocation();
+  const [loc, setLocation] = useLocation();
   return (
     <footer className="relative mt-0 border-t border-border bg-white">
       <div className="container py-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
@@ -127,19 +111,35 @@ function Footer() {
           className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-8 gap-y-10 sm:gap-x-10"
         >
           {FOOTER_NAV.map((item) => (
-            <FootSection key={item.href} item={item} loc={loc} />
+            <FootSection key={item.href} item={item} loc={loc} navigate={setLocation} />
           ))}
         </nav>
+      </div>
+      <div className="border-t border-border/70 bg-white">
+        <div className="container flex flex-col gap-2 py-5 text-[12px] leading-relaxed text-foreground/55 font-zh sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <span>沪ICP备19048066号-9</span>
+          <span>Copyright © 2018-2030. 版权所有</span>
+          <span>沪公网安备 31011502017406号</span>
+        </div>
       </div>
     </footer>
   );
 }
 
-function FootSection({ item, loc }: { item: NavItem; loc: string }) {
+function FootSection({
+  item,
+  loc,
+  navigate,
+}: {
+  item: NavItem;
+  loc: string;
+  navigate: (to: string) => void;
+}) {
   return (
     <div className="min-w-0 lg:min-w-[11.5rem]">
       <Link
         href={item.href}
+        onClick={(e) => handlePathNavClick(e, item.href, loc, navigate)}
         className="text-[14px] font-bold font-zh text-foreground/90 hover:text-[#1E6BFF] transition-colors"
       >
         {item.label}
@@ -150,7 +150,7 @@ function FootSection({ item, loc }: { item: NavItem; loc: string }) {
             <li key={s.href}>
               <Link
                 href={s.href}
-                onClick={(e) => handleInPageHashNav(e, s.href, loc)}
+                onClick={(e) => handleHashNavClick(e, s.href, loc, navigate)}
                 className="text-[12.5px] leading-snug text-foreground/65 hover:text-[#1E6BFF] transition-colors font-zh"
               >
                 {s.label}

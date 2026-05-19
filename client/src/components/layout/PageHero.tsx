@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import AuroraBackdrop from "./AuroraBackdrop";
 import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
-import { handleInPageHashNav } from "@/lib/inPageHashNav";
+import { handleHashNavClick } from "@/lib/inPageHashNav";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 
 type SubItem = {
@@ -42,20 +42,27 @@ export default function PageHero({
   tone?: "dark" | "light";
   subAnchorBase?: string;
 }) {
-  const [loc] = useLocation();
+  const [loc, setLocation] = useLocation();
   const isVideo = !!videoSrc;
   void tone;
 
   return (
     <section
       className={
-        "relative isolate overflow-hidden min-h-[100dvh] min-h-screen flex flex-col " +
-        (isVideo ? "bg-[#F4F1EA] text-foreground" : "bg-white pt-28 lg:pt-36 pb-16 lg:pb-24")
+        "relative isolate overflow-hidden flex flex-col " +
+        (isVideo
+          ? "min-h-[830px] bg-[#F4F1EA] text-foreground lg:min-h-[100dvh] lg:min-h-screen"
+          : "min-h-[100dvh] min-h-screen bg-white pt-28 lg:pt-36 pb-16 lg:pb-24")
       }
     >
       {isVideo ? (
         <>
-          <HeroBackgroundVideo src={videoSrc} poster={posterSrc} />
+          <HeroBackgroundVideo
+            src={videoSrc}
+            poster={posterSrc}
+            mobileClassName="absolute inset-x-0 top-16 flex h-[360px] items-start justify-center sm:h-[420px] lg:inset-0 lg:h-auto"
+            mobileObjectFit="cover"
+          />
           <HeroVideoPageOverlays />
           <div
             aria-hidden
@@ -80,12 +87,12 @@ export default function PageHero({
 
       <div
         className={
-          "relative z-10 flex flex-col flex-1 " +
-          (isVideo ? "pt-28 lg:pt-36 pb-16 lg:pb-20" : "")
+          "relative z-10 flex flex-col " +
+          (isVideo ? "pt-[455px] pb-14 lg:flex-1 lg:pt-36 lg:pb-20" : "flex-1")
         }
       >
         <motion.div
-          className={`container flex flex-1 flex-col ${isVideo ? "justify-end" : "justify-start"}`}
+          className={`container flex flex-col ${isVideo ? "lg:flex-1 lg:justify-end" : "flex-1 justify-start"}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" as const }}
@@ -126,7 +133,8 @@ export default function PageHero({
                         <a
                           href={subHref}
                           onClick={(e) =>
-                            subAnchorBase && handleInPageHashNav(e, subHref, loc)
+                            subAnchorBase &&
+                            handleHashNavClick(e, subHref, loc, setLocation)
                           }
                           className={
                             "group inline-flex items-center gap-2 rounded-full backdrop-blur px-4 py-2 text-[13px] font-medium transition-colors border border-foreground/12 bg-white/75 text-foreground/75 hover:text-[#1E6BFF] hover:border-[#1E6BFF]/40"

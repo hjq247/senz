@@ -135,7 +135,7 @@ export default function PlatformSpline3D() {
     }
 
     /* ── GSAP ScrollTrigger：
-     *   - 开始：#platform-project-section 顶部进入视口底部（英雄视频区滚完后才出现）
+     *   - 开始：#platform-project-section 接近视口下方时提前出现，但首屏初始仍隐藏
      *   - 结束：#neuro-video 顶部到达视口底部（3D 停在此姿态）
      *   - 初始透明 → 进入时淡入；#neuro-video 底边掠过视口中下段后即淡出（早于整块离开）
      */
@@ -145,27 +145,41 @@ export default function PlatformSpline3D() {
 
     /* 初始隐藏 */
     if (wrapEl) gsap.set(wrapEl, { opacity: 0 });
+    const show3D = () => {
+      if (wrapEl) gsap.to(wrapEl, { opacity: 1, duration: 0.5, ease: "power2.out" });
+    };
+    const hide3D = () => {
+      if (wrapEl) gsap.to(wrapEl, { opacity: 0, duration: 0.4, ease: "power2.in" });
+    };
 
     const tl = gsap.timeline({
       defaults: { duration: 1 },
       scrollTrigger: {
         trigger: startEl,
-        start: "top bottom",   /* section 刚入视口底时动画开始 */
+        start: () => {
+          const isMobile = window.matchMedia("(max-width: 767px)").matches;
+          return isMobile ? "top 78%" : "top top+=76";
+        },
         endTrigger: endEl,
         end: "top bottom",     /* 动画结束，3D 物体保持停在当前姿态 */
         scrub: 4,
+        onRefresh: (self) => {
+          if (!wrapEl) return;
+          gsap.set(wrapEl, { opacity: self.isActive ? 1 : 0 });
+        },
+        onUpdate: (self) => {
+          if (!wrapEl || !self.isActive) return;
+          if (Number.parseFloat(getComputedStyle(wrapEl).opacity) < 0.1) {
+            gsap.set(wrapEl, { opacity: 1 });
+          }
+        },
         /* 进入动画区间 → 淡入 */
-        onEnter: () => {
-          if (wrapEl) gsap.to(wrapEl, { opacity: 1, duration: 0.5, ease: "power2.out" });
-        },
+        onEnter: show3D,
+        onLeave: hide3D,
         /* 从开始点往回滚出 → 隐藏 */
-        onLeaveBack: () => {
-          if (wrapEl) gsap.to(wrapEl, { opacity: 0, duration: 0.4, ease: "power2.in" });
-        },
+        onLeaveBack: hide3D,
         /* 从结束点往回滚入 → 恢复 */
-        onEnterBack: () => {
-          if (wrapEl) gsap.to(wrapEl, { opacity: 1, duration: 0.4, ease: "power2.out" });
-        },
+        onEnterBack: show3D,
       },
     });
 
@@ -208,7 +222,7 @@ export default function PlatformSpline3D() {
     <div
       ref={wrapRef}
       className="spline3d-wrap fixed inset-0 pointer-events-none"
-      style={{ zIndex: 30 }}
+      style={{ zIndex: 30, opacity: 0 }}
       aria-hidden
     >
       {/*
