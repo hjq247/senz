@@ -3,6 +3,11 @@ import type { MouseEvent } from "react";
 /** 移动端菜单关闭（锚点跳转前需先解锁 body 滚动） */
 export const MOBILE_NAV_CLOSE_EVENT = "senz:close-mobile-nav";
 
+export type MobileNavCloseDetail = {
+  scrollToId?: string;
+  scrollToTop?: boolean;
+};
+
 /** 跨页导航时 wouter 可能丢失 hash，先记下目标锚点 */
 let pendingHashId: string | null = null;
 
@@ -75,7 +80,9 @@ export function scrollToAnchor(
   const behavior = options?.behavior ?? ("instant" as ScrollBehavior);
 
   window.dispatchEvent(
-    new CustomEvent(MOBILE_NAV_CLOSE_EVENT, { detail: { scrollToId: id } })
+    new CustomEvent<MobileNavCloseDetail>(MOBILE_NAV_CLOSE_EVENT, {
+      detail: { scrollToId: id },
+    })
   );
 
   const run = () => {
@@ -100,6 +107,35 @@ export function scrollToAnchor(
   return true;
 }
 
+/** 滚到页面顶部（解锁手机菜单锁滚动 + 多次重试，避免 iOS 竞态） */
+export function scrollToTop(behavior: ScrollBehavior = "instant"): void {
+  if (typeof window === "undefined") return;
+
+  const run = () => {
+    releaseMobileNavScrollLock();
+    window.scrollTo({ top: 0, left: 0, behavior });
+  };
+
+  run();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(run);
+  });
+  setTimeout(run, 80);
+  setTimeout(run, 200);
+}
+
+function clearHashAndScrollTop(
+  basePath: string,
+  behavior: ScrollBehavior = "instant"
+): void {
+  if (typeof window === "undefined") return;
+  const path = stripHash(basePath);
+  if (window.location.hash) {
+    window.history.replaceState(null, "", path);
+  }
+  scrollToTop(behavior);
+}
+
 /** 路由切换后应用 URL hash 或跨页待滚锚点 */
 export function applyHashAfterRoute(
   loc: string,
@@ -108,18 +144,25 @@ export function applyHashAfterRoute(
   if (typeof window === "undefined") return;
 
   const behavior = options?.behavior ?? ("instant" as ScrollBehavior);
+  const basePath = stripHash(loc);
   const hashFromUrl = window.location.hash.slice(1);
   const pending = pendingHashId;
   pendingHashId = null;
 
-  const rawId = pending || hashFromUrl;
+  const pathnameMatches =
+    window.location.pathname === basePath ||
+    window.location.pathname.startsWith(basePath + "/");
+
+  // 仅当显式 pending 或 URL hash 属于当前页时才滚锚点，避免上一页残留 #hash
+  const rawId =
+    pending || (hashFromUrl && pathnameMatches ? hashFromUrl : null);
+
   if (!rawId) {
-    window.scrollTo({ top: 0, left: 0, behavior });
+    clearHashAndScrollTop(basePath, behavior);
     return;
   }
 
   const id = normalizeHashId(rawId);
-  const basePath = loc.split("#")[0] || loc;
   const targetUrl = `${basePath}#${id}`;
 
   if (`${window.location.pathname}${window.location.hash}` !== targetUrl) {
@@ -130,7 +173,9 @@ export function applyHashAfterRoute(
     if (scrollToAnchor(id, { behavior })) return;
     if (attempt < 24) {
       setTimeout(() => tryScroll(attempt + 1), 50);
+      return;
     }
+    clearHashAndScrollTop(basePath, behavior);
   };
 
   requestAnimationFrame(() => {
@@ -179,17 +224,25 @@ export function handlePathNavClick(
     return;
   }
 
+  const target = stripHash(href);
   const current = getCurrentBrowserPath(currentPath);
-  if (!isSamePath(current, href)) return;
 
   e.preventDefault();
-  window.dispatchEvent(new CustomEvent(MOBILE_NAV_CLOSE_EVENT));
+  pendingHashId = null;
+  window.dispatchEvent(
+    new CustomEvent<MobileNavCloseDetail>(MOBILE_NAV_CLOSE_EVENT, {
+      detail: { scrollToTop: true },
+    })
+  );
   releaseMobileNavScrollLock();
-  window.history.pushState(null, "", href);
 
-  requestAnimationFrame(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-  });
+  if (!isSamePath(current, target)) {
+    navigate(target);
+    return;
+  }
+
+  window.history.pushState(null, "", target);
+  scrollToTop("instant");
 }
 
 /** @deprecated 使用 handleHashNavClick */

@@ -27,14 +27,19 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    // 路由已切换：勿恢复打开菜单前的 scrollY（会挡住 PageShell 滚顶）
+    skipScrollRestoreRef.current = true;
     setOpen(false);
     setHover(null);
   }, [loc]);
 
   useEffect(() => {
     const onClose = (e: Event) => {
-      const detail = (e as CustomEvent<{ scrollToId?: string }>).detail;
-      if (detail?.scrollToId) skipScrollRestoreRef.current = true;
+      const detail = (e as CustomEvent<{ scrollToId?: string; scrollToTop?: boolean }>)
+        .detail;
+      if (detail?.scrollToId || detail?.scrollToTop) {
+        skipScrollRestoreRef.current = true;
+      }
       setOpen(false);
     };
     window.addEventListener(MOBILE_NAV_CLOSE_EVENT, onClose);
