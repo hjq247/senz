@@ -24,7 +24,6 @@ export default function Hero() {
       <HeroBackgroundVideo
         eager
         src={HERO_SPLIT.rightVideo}
-        previewSrc={HERO_SPLIT.previewVideo}
         poster={HERO_SPLIT.rightPoster}
         posterFallback={HERO_SPLIT.rightPosterFallback}
         preloadDesktop="auto"

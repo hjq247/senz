@@ -164,7 +164,7 @@ export default function HeroBackgroundVideo({
                 ? aspectRatio
                 : undefined,
             objectPosition,
-            filter: isPlaying ? undefined : "saturate(0.92) blur(0.25px)",
+            filter: isPlaying ? undefined : "saturate(0.96)",
           }}
           aria-hidden
         />

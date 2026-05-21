@@ -14,7 +14,18 @@ function localManusStorageDir(): string {
 
 export function registerStorageProxy(app: Express) {
   // Serve files from disk first; Forge presign below is only a fallback.
-  app.use("/manus-storage", express.static(localManusStorageDir(), { index: false, fallthrough: true }));
+  app.use(
+    "/manus-storage",
+    express.static(localManusStorageDir(), {
+      index: false,
+      fallthrough: true,
+      maxAge: "1y",
+      immutable: true,
+      setHeaders(res) {
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      },
+    })
+  );
 
   app.get("/manus-storage/*", async (req, res) => {
     const key = (req.params as Record<string, string>)[0];

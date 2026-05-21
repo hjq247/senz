@@ -54,17 +54,17 @@ export const HERO_POSTERS = {
 
 export type HeroKey = keyof typeof HERO_VIDEOS;
 
-/** Hero 低清首播层：480w / no-audio / faststart，先动起来，再切高清 */
+/** Hero 低清首播层：640w / no-audio / faststart，先动起来，再切高清 */
 export const HERO_PREVIEWS = {
-  home: "/manus-storage/senz_hero_home_v12_preview_480p.mp4",
-  platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91_preview_480p.mp4",
-  products: "/manus-storage/hero_products_live_90fb4cd2_preview_480p.mp4",
-  patient: "/manus-storage/hero_patient_live_375d336e_preview_480p.mp4",
-  doctor: "/manus-storage/hero_doctor_live_acf70466_preview_480p.mp4",
-  industry: "/manus-storage/hero_industry_live_b2bffbd0_preview_480p.mp4",
-  about: "/manus-storage/hero_about_live_106baeda_preview_480p.mp4",
-  news: "/manus-storage/senz_hero_news_v2_69e2baa6_preview_480p.mp4",
-  careers: "/manus-storage/hero_careers_live_e1fcceb7_preview_480p.mp4",
+  home: "/manus-storage/senz_hero_home_v12_lite_de2b59ad_preview_640w.mp4",
+  platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91_preview_640w.mp4",
+  products: "/manus-storage/hero_products_live_90fb4cd2_preview_640w.mp4",
+  patient: "/manus-storage/hero_patient_live_375d336e_preview_640w.mp4",
+  doctor: "/manus-storage/hero_doctor_live_acf70466_preview_640w.mp4",
+  industry: "/manus-storage/hero_industry_live_b2bffbd0_preview_640w.mp4",
+  about: "/manus-storage/hero_about_live_106baeda_preview_640w.mp4",
+  news: "/manus-storage/senz_hero_news_v2_69e2baa6_preview_640w.mp4",
+  careers: "/manus-storage/hero_careers_live_e1fcceb7_preview_640w.mp4",
 } as const;
 
 export function getHeroPreview(videoSrc?: string) {
@@ -75,7 +75,7 @@ export function getHeroPreview(videoSrc?: string) {
 
 /** 首页 Hero 主视频（v12 lite）；双字段同址，保留 leftVideo 字段名兼容旧调用 */
 export const HERO_SPLIT = {
-  /** 低清首播层：480w / faststart / ~160KB，用于立即动起来 */
+  /** 低清首播层：640w / faststart / ~408KB，用于立即动起来 */
   previewVideo: HERO_PREVIEWS.home,
   leftVideo: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.mp4",
   /** 首屏占位：webp ~32KB，先于视频显示 */

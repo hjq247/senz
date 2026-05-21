@@ -5,7 +5,7 @@ import { Link, useLocation } from "wouter";
 import Navbar from "@/components/site/Navbar";
 import { SOLUTION_DETAILS, type Audience } from "@/lib/solutions";
 import { AI_FLOWLIGHT_SQUARE } from "@/lib/assets";
-import { HERO_VIDEOS, HERO_POSTERS, getHeroPreview } from "@/lib/videos";
+import { HERO_VIDEOS, HERO_POSTERS } from "@/lib/videos";
 import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 
@@ -50,7 +50,6 @@ export default function SolutionDetail({ audience }: { audience: Audience }) {
       <section className="relative isolate overflow-hidden min-h-[100dvh] min-h-screen flex flex-col bg-[#F4F1EA] text-foreground">
         <HeroBackgroundVideo
           src={SOLUTION_HERO_VIDEO[audience]}
-          previewSrc={getHeroPreview(SOLUTION_HERO_VIDEO[audience])}
           poster={SOLUTION_HERO_POSTER[audience]}
         />
         <HeroVideoPageOverlays />

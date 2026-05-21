@@ -9,7 +9,6 @@ import AuroraBackdrop from "./AuroraBackdrop";
 import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { handleHashNavClick } from "@/lib/inPageHashNav";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
-import { getHeroPreview } from "@/lib/videos";
 
 type SubItem = {
   id: string;
@@ -60,7 +59,6 @@ export default function PageHero({
         <>
           <HeroBackgroundVideo
             src={videoSrc}
-            previewSrc={getHeroPreview(videoSrc)}
             poster={posterSrc}
             mobileClassName="absolute inset-x-0 top-16 flex h-[360px] items-start justify-center sm:h-[420px] lg:inset-0 lg:h-auto"
             mobileObjectFit="cover"
