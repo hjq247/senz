@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import VideoCard from "./VideoCard";
-import { VIDEOS, VIDEO_POSTERS } from "@/lib/videos";
+import { VIDEOS, VIDEO_POSTERS, VIDEO_PREVIEWS } from "@/lib/videos";
 
 const VERBS = [
   { en: "ACCELERATE", zh: "加速", v: "让 AI 把分散的医疗服务，变成一套可感知的完整流程。" },
@@ -88,6 +88,7 @@ export default function HomeBrandReel() {
           >
             <VideoCard
               src={VIDEOS.aiCapability}
+              previewSrc={VIDEO_PREVIEWS.aiCapability}
               poster={VIDEO_POSTERS.aiCapability}
               aspect="16 / 9"
               radius="rounded-[28px]"

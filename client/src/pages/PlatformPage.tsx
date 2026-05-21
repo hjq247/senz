@@ -14,7 +14,7 @@ import PlatformSpline3D from "@/components/site/PlatformSpline3D";
 import PlatformProjectSection from "@/components/site/PlatformProjectSection";
 import PatentSwiperSection from "@/components/site/PatentSwiperSection";
 import { TERMINAL, NEURO, PLATFORM_SECTIONS } from "@/lib/copy";
-import { HERO_VIDEOS, HERO_POSTERS, VIDEOS } from "@/lib/videos";
+import { HERO_VIDEOS, HERO_POSTERS, VIDEOS, VIDEO_PREVIEWS } from "@/lib/videos";
 import HeroBackgroundVideo from "@/components/site/HeroBackgroundVideo";
 import { HeroVideoPageOverlays } from "@/lib/hero-video-overlays";
 
@@ -112,6 +112,7 @@ export default function PlatformPage() {
         <div className="relative h-[280px] sm:h-[360px] lg:h-[440px] w-full overflow-hidden">
           <HeroBackgroundVideo
             src={VIDEOS.neuroFlow}
+            previewSrc={VIDEO_PREVIEWS.neuroFlow}
             poster={HERO_POSTERS.platform}
             mobileInsetTopClassName="top-0"
             letterboxClassName="bg-[#0B0F1E]"

@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import VideoCard from "./VideoCard";
-import { VIDEOS, VIDEO_POSTERS } from "@/lib/videos";
+import { VIDEOS, VIDEO_POSTERS, VIDEO_PREVIEWS } from "@/lib/videos";
 import { PRODUCT_SYSTEM_TITLE } from "@/lib/copy";
 
 const ITEMS = [
@@ -26,6 +26,7 @@ const ITEMS = [
     cta: "深入了解 慢病管理解决方案",
     href: "/solutions/patient",
     video: VIDEOS.patientLoop,
+    preview: VIDEO_PREVIEWS.patientLoop,
     poster: VIDEO_POSTERS.patientLoop,
     accent: "from-[#FF77C3] to-[#FFB8DC]",
     text: "#A23A78",
@@ -40,6 +41,7 @@ const ITEMS = [
     cta: "深入了解 医生临床智能伙伴",
     href: "/solutions/doctor",
     video: VIDEOS.doctorLoop,
+    preview: VIDEO_PREVIEWS.doctorLoop,
     poster: VIDEO_POSTERS.doctorLoop,
     accent: "from-[#8A6BFF] to-[#B6A8FF]",
     text: "#5340C9",
@@ -54,6 +56,7 @@ const ITEMS = [
     cta: "深入了解 药企解决方案",
     href: "/solutions/industry",
     video: VIDEOS.pharmaLoop,
+    preview: VIDEO_PREVIEWS.pharmaLoop,
     poster: VIDEO_POSTERS.pharmaLoop,
     accent: "from-[#1E6BFF] to-[#2AC58E]",
     text: "#0E5BCC",
@@ -129,6 +132,7 @@ export default function HomeAudienceVideos() {
               <Link href={it.href} className="block">
                 <VideoCard
                   src={it.video}
+                  previewSrc={it.preview}
                   poster={it.poster}
                   aspect="1 / 1"
                   radius="rounded-none"

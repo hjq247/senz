@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 interface VideoCardProps {
   src: string;
+  previewSrc?: string;
   poster?: string;
   className?: string;
   /** object-fit, default cover */
@@ -31,6 +32,7 @@ interface VideoCardProps {
 
 export default function VideoCard({
   src,
+  previewSrc,
   poster,
   className = "",
   fit = "cover",
@@ -41,13 +43,18 @@ export default function VideoCard({
   softWash = false,
 }: VideoCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const previewVideoRef = useRef<HTMLVideoElement | null>(null);
   const [activated, setActivated] = useState(false);
+  const [previewPlaying, setPreviewPlaying] = useState(false);
+  const [highPlaying, setHighPlaying] = useState(false);
   const { objectFit } = useResponsiveVideo();
   const aspectRatio = useVideoAspectRatio(videoRef, src);
   const effectiveFit = fit === "contain" ? "contain" : objectFit;
+  const hasPreview = !!previewSrc;
 
   useEffect(() => {
     const v = videoRef.current;
+    const pv = previewVideoRef.current;
     if (!v) return;
     const io = new IntersectionObserver(
       (entries) => {
@@ -57,13 +64,23 @@ export default function VideoCard({
               // 非首屏视频：先不预加载，进入视口再开始取元数据/拉流，避免一上来多路抢资源。
               setActivated(true);
               try {
-                v.preload = "metadata";
-                v.load();
+                if (hasPreview && pv) {
+                  pv.preload = "auto";
+                  pv.load();
+                } else {
+                  v.preload = "metadata";
+                  v.load();
+                }
               } catch {}
             }
-            v.play().catch(() => {});
+            if (hasPreview && !highPlaying) {
+              pv?.play().catch(() => {});
+            } else {
+              v.play().catch(() => {});
+            }
           } else {
             v.pause();
+            pv?.pause();
           }
         }
       },
@@ -71,7 +88,23 @@ export default function VideoCard({
     );
     io.observe(v);
     return () => io.disconnect();
-  }, [activated]);
+  }, [activated, hasPreview, highPlaying]);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !hasPreview || !previewPlaying) return;
+    try {
+      v.preload = "metadata";
+      v.load();
+      v.play().catch(() => {});
+    } catch {}
+  }, [hasPreview, previewPlaying]);
+
+  const fitClass =
+    effectiveFit === "contain"
+      ? "h-full w-full object-contain object-top"
+      : "h-full w-full object-cover";
+  const layerClass = "absolute inset-0";
 
   return (
     <div
@@ -85,18 +118,52 @@ export default function VideoCard({
       style={{ aspectRatio: aspect }}
       aria-label={label}
     >
+      {hasPreview ? (
+        <video
+          ref={previewVideoRef}
+          src={previewSrc}
+          poster={poster}
+          muted
+          loop
+          playsInline
+          preload={activated ? "auto" : "none"}
+          onPlaying={() => setPreviewPlaying(true)}
+          className={cn(
+            layerClass,
+            fitClass,
+            "transition-opacity duration-500",
+            highPlaying ? "opacity-0" : "opacity-100"
+          )}
+          style={{
+            aspectRatio:
+              effectiveFit === "contain" && aspectRatio ? aspectRatio : undefined,
+            ...(softWash
+              ? { filter: "saturate(0.78) brightness(1.04) contrast(0.96)" }
+              : {}),
+          }}
+          aria-hidden
+        />
+      ) : null}
       <video
         ref={videoRef}
         src={src}
-        poster={poster}
+        poster={hasPreview ? undefined : poster}
         muted
         loop
         playsInline
-        preload={activated ? "metadata" : "none"}
+        preload={
+          hasPreview && !previewPlaying
+            ? "none"
+            : activated
+              ? "metadata"
+              : "none"
+        }
+        onPlaying={() => setHighPlaying(true)}
         className={cn(
-          effectiveFit === "contain"
-            ? "max-h-full max-w-full object-contain object-top"
-            : "h-full w-full object-cover"
+          layerClass,
+          fitClass,
+          hasPreview && !highPlaying && "opacity-0",
+          hasPreview && highPlaying && "opacity-100 transition-opacity duration-500"
         )}
         style={{
           aspectRatio:

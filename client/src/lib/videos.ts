@@ -24,6 +24,21 @@ export const VIDEO_POSTERS = {
   aiCapability: "/manus-storage/senz_ai_capability_71ee1f45.webp",
 } as const;
 
+/** 业务循环视频的中清首播层 */
+export const VIDEO_PREVIEWS = {
+  patientLoop: "/manus-storage/senz_cx_v2_6f6a9e80_preview_960w.mp4",
+  doctorLoop: "/manus-storage/senz_dx_v2_0714fc59_preview_960w.mp4",
+  pharmaLoop: "/manus-storage/senz_px_v2_2aab0102_preview_960w.mp4",
+  aiCapability: "/manus-storage/senz_ai_capability_34dce694_preview_960w.mp4",
+  neuroFlow: "/manus-storage/senz_neuro_flow_17709288_preview_960w.mp4",
+} as const;
+
+export function getVideoPreview(videoSrc?: string) {
+  if (!videoSrc) return undefined;
+  const found = Object.entries(VIDEOS).find(([, src]) => src === videoSrc);
+  return found ? VIDEO_PREVIEWS[found[0] as keyof typeof VIDEO_PREVIEWS] : undefined;
+}
+
 /** 各页面 Hero 真人实拍背景视频（faststart 版本） */
 export const HERO_VIDEOS = {
   /** 首页 Hero（13s）· v12 lite：720p / CRF 28 / faststart，约 2MB */
@@ -54,17 +69,17 @@ export const HERO_POSTERS = {
 
 export type HeroKey = keyof typeof HERO_VIDEOS;
 
-/** Hero 低清首播层：640w / no-audio / faststart，先动起来，再切高清 */
+/** Hero 中清首播层：960w / no-audio / faststart，先动起来，再切高清 */
 export const HERO_PREVIEWS = {
-  home: "/manus-storage/senz_hero_home_v12_lite_de2b59ad_preview_640w.mp4",
-  platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91_preview_640w.mp4",
-  products: "/manus-storage/hero_products_live_90fb4cd2_preview_640w.mp4",
-  patient: "/manus-storage/hero_patient_live_375d336e_preview_640w.mp4",
-  doctor: "/manus-storage/hero_doctor_live_acf70466_preview_640w.mp4",
-  industry: "/manus-storage/hero_industry_live_b2bffbd0_preview_640w.mp4",
-  about: "/manus-storage/hero_about_live_106baeda_preview_640w.mp4",
-  news: "/manus-storage/senz_hero_news_v2_69e2baa6_preview_640w.mp4",
-  careers: "/manus-storage/hero_careers_live_e1fcceb7_preview_640w.mp4",
+  home: "/manus-storage/senz_hero_home_v12_lite_de2b59ad_preview_960w.mp4",
+  platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91_preview_960w.mp4",
+  products: "/manus-storage/hero_products_live_90fb4cd2_preview_960w.mp4",
+  patient: "/manus-storage/hero_patient_live_375d336e_preview_960w.mp4",
+  doctor: "/manus-storage/hero_doctor_live_acf70466_preview_960w.mp4",
+  industry: "/manus-storage/hero_industry_live_b2bffbd0_preview_960w.mp4",
+  about: "/manus-storage/hero_about_live_106baeda_preview_960w.mp4",
+  news: "/manus-storage/senz_hero_news_v2_69e2baa6_preview_960w.mp4",
+  careers: "/manus-storage/hero_careers_live_e1fcceb7_preview_960w.mp4",
 } as const;
 
 export function getHeroPreview(videoSrc?: string) {
@@ -75,7 +90,7 @@ export function getHeroPreview(videoSrc?: string) {
 
 /** 首页 Hero 主视频（v12 lite）；双字段同址，保留 leftVideo 字段名兼容旧调用 */
 export const HERO_SPLIT = {
-  /** 低清首播层：640w / faststart / ~408KB，用于立即动起来 */
+  /** 中清首播层：960w / faststart / ~832KB，用于先清楚地动起来 */
   previewVideo: HERO_PREVIEWS.home,
   leftVideo: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.mp4",
   /** 首屏占位：webp ~32KB，先于视频显示 */
