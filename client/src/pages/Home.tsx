@@ -9,6 +9,7 @@
  *  · HomeNewsTeaser（最新动态单行滚动）
  *  · HomeNowDoing（深至正在做的）
  */
+import { useLayoutEffect } from "react";
 import PageShell from "@/components/layout/PageShell";
 import Hero from "@/components/site/Hero";
 import HomeStatsBand from "@/components/site/HomeStatsBand";
@@ -20,6 +21,11 @@ import HomeNewsTeaser from "@/components/site/HomeNewsTeaser";
 import HomeNowDoing from "@/components/site/HomeNowDoing";
 
 export default function Home() {
+  useLayoutEffect(() => {
+    if (window.location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+  }, []);
+
   return (
     <PageShell>
       <Hero />

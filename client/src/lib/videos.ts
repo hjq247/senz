@@ -18,10 +18,11 @@ export const VIDEOS = {
 
 /** 与 VIDEOS 同帧 webp poster */
 export const VIDEO_POSTERS = {
-  patientLoop: "/manus-storage/senz_cx_v2_ce16ad54.webp",
-  doctorLoop: "/manus-storage/senz_dx_v2_2adf9926.webp",
-  pharmaLoop: "/manus-storage/senz_px_v2_c0e28c64.webp",
-  aiCapability: "/manus-storage/senz_ai_capability_71ee1f45.webp",
+  patientLoop: "/manus-storage/senz_cx_v2_6f6a9e80_poster_hq.webp",
+  doctorLoop: "/manus-storage/senz_dx_v2_0714fc59_poster_hq.webp",
+  pharmaLoop: "/manus-storage/senz_px_v2_2aab0102_poster_hq.webp",
+  aiCapability: "/manus-storage/senz_ai_capability_34dce694_poster_hq.webp",
+  neuroFlow: "/manus-storage/senz_neuro_flow_17709288_poster_hq.webp",
 } as const;
 
 /** 业务循环视频的中清首播层 */
@@ -56,15 +57,15 @@ export const HERO_VIDEOS = {
 
 /** 与 HERO_VIDEOS 一一对应的同色系首帧 webp 静态图（~40-80KB） */
 export const HERO_POSTERS = {
-  home: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.webp",
-  platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91.webp",
-  products: "/manus-storage/hero_products_live_31494b85.webp",
-  patient: "/manus-storage/hero_patient_live_a334c03e.webp",
-  doctor: "/manus-storage/hero_doctor_live_97013ef3.webp",
-  industry: "/manus-storage/hero_industry_live_817e244e.webp",
-  about: "/manus-storage/hero_about_live_7751f73d.webp",
-  news: "/manus-storage/senz_hero_news_v2_9d780267.webp",
-  careers: "/manus-storage/hero_careers_live_3568f430.webp",
+  home: "/manus-storage/senz_hero_home_v12_lite_de2b59ad_poster_hq.webp",
+  platform: "/manus-storage/hero_platform_feishu_51_69_8c4e2a91_poster_hq.webp",
+  products: "/manus-storage/hero_products_live_90fb4cd2_poster_hq.webp",
+  patient: "/manus-storage/hero_patient_live_375d336e_poster_hq.webp",
+  doctor: "/manus-storage/hero_doctor_live_acf70466_poster_hq.webp",
+  industry: "/manus-storage/hero_industry_live_b2bffbd0_poster_hq.webp",
+  about: "/manus-storage/hero_about_live_106baeda_poster_hq.webp",
+  news: "/manus-storage/senz_hero_news_v2_69e2baa6_poster_hq.webp",
+  careers: "/manus-storage/hero_careers_live_e1fcceb7_poster_hq.webp",
 } as const;
 
 export type HeroKey = keyof typeof HERO_VIDEOS;
@@ -93,10 +94,10 @@ export const HERO_SPLIT = {
   /** 中清首播层：960w / faststart / ~832KB，用于先清楚地动起来 */
   previewVideo: HERO_PREVIEWS.home,
   leftVideo: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.mp4",
-  /** 首屏占位：webp ~32KB，先于视频显示 */
-  leftPoster: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.webp",
+  /** 首屏占位：高清首帧 webp，先于视频显示 */
+  leftPoster: HERO_POSTERS.home,
   rightVideo: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.mp4",
-  rightPoster: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.webp",
+  rightPoster: HERO_POSTERS.home,
   /** video[poster] 兜底（Safari 等对 webp poster 支持不稳时用 PNG） */
   rightPosterFallback: "/manus-storage/senz_hero_home_v12_lite_de2b59ad.png",
 } as const;
