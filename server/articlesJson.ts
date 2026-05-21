@@ -79,8 +79,7 @@ export async function readArticlesJson(): Promise<ArticlesJson> {
     const raw = await readFile(articlesJsonPath(), "utf8");
     const parsed = JSON.parse(raw) as Partial<ArticlesJson>;
     const items = Array.isArray(parsed.items) ? parsed.items : [];
-    console.log(raw);
-    
+
     return {
       updatedAt: parsed.updatedAt ?? null,
       total: items.length,
