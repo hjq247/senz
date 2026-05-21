@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SENZ_LOGO } from "@/lib/assets";
 
 const KEY = "senz_intro_v1_played";
+const INTRO_MS = 1400;
 
 export default function IntroSplash() {
   const [show, setShow] = useState<boolean>(() => {
@@ -16,16 +17,17 @@ export default function IntroSplash() {
     return sessionStorage.getItem(KEY) !== "1";
   });
 
+  const dismiss = () => {
+    sessionStorage.setItem(KEY, "1");
+    setShow(false);
+    window.dispatchEvent(new CustomEvent("senz:intro-ended"));
+  };
+
   useEffect(() => {
     if (!show) return;
-    // 锁定滚动
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const t = window.setTimeout(() => {
-      sessionStorage.setItem(KEY, "1");
-      setShow(false);
-      window.dispatchEvent(new CustomEvent("senz:intro-ended"));
-    }, 2600);
+    const t = window.setTimeout(dismiss, INTRO_MS);
     return () => {
       window.clearTimeout(t);
       document.body.style.overflow = prev;
@@ -37,10 +39,16 @@ export default function IntroSplash() {
       {show && (
         <motion.div
           key="intro"
+          role="button"
+          tabIndex={0}
+          onClick={dismiss}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") dismiss();
+          }}
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: -40, transition: { duration: 0.7, ease: [0.65, 0, 0.35, 1] } }}
-          className="fixed inset-0 z-[100] overflow-hidden bg-[#070A1A] text-white"
-          aria-hidden
+          exit={{ opacity: 0, y: -40, transition: { duration: 0.5, ease: [0.65, 0, 0.35, 1] } }}
+          className="fixed inset-0 z-[100] overflow-hidden bg-[#070A1A] text-white cursor-pointer"
+          aria-label="跳过开屏动画"
         >
           {/* 背景星点 */}
           <div

@@ -9,7 +9,12 @@ import { Link, useLocation } from "wouter";
 import Navbar from "@/components/site/Navbar";
 import { applyHashAfterRoute, handleHashNavClick, handlePathNavClick } from "@/lib/inPageHashNav";
 import { SITE_NAV, type NavItem } from "@/lib/site-nav";
-import { HERO_VIDEOS, HERO_POSTERS, type HeroKey } from "@/lib/videos";
+import {
+  HERO_POSTERS,
+  HERO_PREVIEWS,
+  HERO_SPLIT,
+  type HeroKey,
+} from "@/lib/videos";
 
 /** 页脚不重复「首页」（Logo 已可回首页） */
 const FOOTER_NAV = SITE_NAV.filter((item) => item.href !== "/");
@@ -31,7 +36,7 @@ function usePreloadHero(loc: string) {
   useEffect(() => {
     const key = routeToHero(loc);
     if (!key) return;
-    const v = HERO_VIDEOS[key];
+    const v = key === "home" ? HERO_SPLIT.previewVideo : HERO_PREVIEWS[key];
     const p = HERO_POSTERS[key];
     const links: HTMLLinkElement[] = [];
 

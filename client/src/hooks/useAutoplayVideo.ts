@@ -6,6 +6,7 @@ type Options = {
   /** 桌面端慢放（移动端强制 1，避免 WebKit 阻断静音自动播放） */
   desktopSlowMo?: boolean;
   slowRate?: number;
+  enabled?: boolean;
 };
 
 /** 移动端/iOS 静音内联自动播放：属性 + 可见性/触摸/开屏结束后重试 play() */
@@ -13,9 +14,11 @@ export function useAutoplayVideo(
   videoRef: RefObject<HTMLVideoElement | null>,
   options?: Options
 ) {
-  const { desktopSlowMo = false, slowRate = 0.7 } = options ?? {};
+  const { desktopSlowMo = false, slowRate = 0.7, enabled = true } =
+    options ?? {};
 
   useEffect(() => {
+    if (!enabled) return;
     const v = videoRef.current;
     if (!v) return;
 
@@ -46,6 +49,8 @@ export function useAutoplayVideo(
     v.addEventListener("loadedmetadata", tryPlay);
     v.addEventListener("loadeddata", tryPlay);
     v.addEventListener("canplay", tryPlay);
+    // 有少量缓冲即可尝试播放，不必等 canplaythrough
+    v.addEventListener("canplaythrough", tryPlay, { once: true });
 
     const onVis = () => {
       if (document.visibilityState === "visible") tryPlay();
@@ -75,5 +80,5 @@ export function useAutoplayVideo(
       window.removeEventListener(INTRO_ENDED_EVENT, unlock);
       io.disconnect();
     };
-  }, [videoRef, desktopSlowMo, slowRate]);
+  }, [videoRef, desktopSlowMo, slowRate, enabled]);
 }

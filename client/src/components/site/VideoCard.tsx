@@ -7,7 +7,6 @@
  *  · 动效：仅靠视频自身循环 + 容器淡入上移，不堆砌额外动画。
  */
 import { useEffect, useRef, useState } from "react";
-import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 import { useResponsiveVideo } from "@/hooks/useResponsiveVideo";
 import { useVideoAspectRatio } from "@/hooks/useVideoAspectRatio";
 import { cn } from "@/lib/utils";
@@ -43,7 +42,6 @@ export default function VideoCard({
 }: VideoCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [activated, setActivated] = useState(false);
-  useAutoplayVideo(videoRef);
   const { objectFit } = useResponsiveVideo();
   const aspectRatio = useVideoAspectRatio(videoRef, src);
   const effectiveFit = fit === "contain" ? "contain" : objectFit;

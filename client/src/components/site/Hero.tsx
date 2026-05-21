@@ -22,13 +22,17 @@ export default function Hero() {
       className="relative isolate overflow-hidden bg-[#F4F1EA] text-foreground min-h-[860px] flex flex-col lg:min-h-[100dvh] lg:h-screen"
     >
       <HeroBackgroundVideo
+        eager
         src={HERO_SPLIT.rightVideo}
+        previewSrc={HERO_SPLIT.previewVideo}
         poster={HERO_SPLIT.rightPoster}
+        posterFallback={HERO_SPLIT.rightPosterFallback}
+        preloadDesktop="auto"
+        preloadMobile="auto"
         objectPositionDesktop="50% 65%"
         mobileClassName="absolute inset-x-0 top-16 flex h-[360px] items-start justify-center sm:h-[420px] lg:inset-x-0 lg:bottom-0 lg:top-[88px] lg:h-[calc(100%-88px)]"
         mobileObjectFit="cover"
         desktopClassName="absolute inset-x-0 bottom-0 top-[88px] h-[calc(100%-88px)] w-full"
-        desktopSlowMo
       />
 
       <HeroVideoLightOverlays />
